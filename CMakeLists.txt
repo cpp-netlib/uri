@@ -12,7 +12,7 @@ set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 find_package(Boost 1.52 REQUIRED)
 
-include_directories(${Uri_SOURCE_DIR}/src ${Boost_INCLUDE_DIRS})
+include_directories(${Uri_SOURCE_DIR}/include ${Boost_INCLUDE_DIRS})
 
 set(CMAKE_VERBOSE_MAKEFILE true)
 
@@ -40,12 +40,37 @@ if (WIN32)
   add_definitions(-D_WIN32_WINNT=0x0501)
 endif(WIN32)
 
-add_subdirectory(src)
+set(Uri_SRCS src/uri.cpp src/uri_io.cpp src/uri_builder.cpp src/detail/uri_parse.cpp)
+add_library(cppnetlib-uri ${Uri_SRCS})
 
 if (CMAKE_PROJECT_NAME STREQUAL "Uri" OR CPP-NETLIB_BUILD_TESTS)
   enable_testing()
   if (NOT DEFINED GTEST_FOUND)
     find_package(GTest REQUIRED)
   endif()
-  add_subdirectory(test)
+  
+  include_directories(${GTEST_INCLUDE_DIRS})
+
+  set(
+    TESTS
+    uri_test
+    uri_encoding_test
+    uri_normalization_test
+    uri_comparison_test
+    uri_relativize_test
+    uri_resolve_test
+    uri_builder_test
+    )
+  foreach (test ${TESTS})
+    add_executable(${test} test/${test}.cpp)
+    target_link_libraries(${test} ${GTEST_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} cppnetlib-uri)
+    if (OPENSSL_FOUND)
+      target_link_libraries(${test} ${OPENSSL_LIBRARIES})
+    endif()
+    set_target_properties(${test}
+      PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Uri_BINARY_DIR}/tests)
+    add_test(${test}
+        ${Uri_BINARY_DIR}/tests/${test})
+  endforeach (test)
+
 endif()
