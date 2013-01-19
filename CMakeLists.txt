@@ -12,7 +12,7 @@ set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 find_package(Boost 1.52 REQUIRED)
 
-include_directories(${Uri_SOURCE_DIR}/include ${Boost_INCLUDE_DIRS})
+include_directories(include src ${Boost_INCLUDE_DIRS})
 
 set(CMAKE_VERBOSE_MAKEFILE true)
 
