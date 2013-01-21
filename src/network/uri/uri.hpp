@@ -38,8 +38,8 @@ namespace network {
   class NETWORK_URI_DECL uri_category_impl : public std::error_category {
 
   public:
-
-    uri_category_impl();
+    
+    uri_category_impl() = default;
 
 #if defined(BOOST_NO_CXX11_NOEXCEPT)
     virtual ~uri_category_impl();
