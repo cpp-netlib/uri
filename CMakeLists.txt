@@ -43,6 +43,10 @@ endif(WIN32)
 set(Uri_SRCS src/uri.cpp src/uri_io.cpp src/uri_builder.cpp src/detail/uri_parse.cpp)
 add_library(cppnetlib-uri ${Uri_SRCS})
 
+if(CMAKE_PROJECT_NAME STREQUAL "CPP-NETLIB")
+  include(install.cmake)
+endif()
+
 if (CMAKE_PROJECT_NAME STREQUAL "Uri" OR CPP-NETLIB_BUILD_TESTS)
   enable_testing()
   if (NOT DEFINED GTEST_FOUND)
