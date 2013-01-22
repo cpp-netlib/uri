@@ -26,9 +26,6 @@
 #include <vector>
 
 namespace network {
-  uri_category_impl::uri_category_impl() {
-
-  }
 
 #if defined(BOOST_NO_CXX11_NOEXCEPT)
   uri_category_impl::~uri_category_impl() {
