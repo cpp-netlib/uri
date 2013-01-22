@@ -1,0 +1,12 @@
+# Copyright (c) Wojciech Kordalski 2013.
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+if(CPPNETLIB_IN_BUILD_TREE)
+  set(CPPNETLIB_URI_INCLUDE_DIR "@PROJECT_SOURCE_DIR@/uri/include/")
+  list(APPEND CPPNETLIB_INCLUDE_DIRS ${CPPNETLIB_URI_INCLUDE_DIR})
+endif()
+set(CPPNETLIB_URI_LIBRARIES cppnetlib-uri)
+set(CPPNETLIB_URI_LIBRARY cppnetlib-uri)
+list(APPEND CPPNETLIB_LIBRARIES ${CPPNETLIB_URI_LIBRARIES})
