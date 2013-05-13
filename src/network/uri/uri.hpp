@@ -101,6 +101,8 @@ namespace network {
 
   class uri_builder;
 
+  typedef boost::string_ref string_view;
+  
   class NETWORK_URI_DECL uri {
 
     friend class uri_builder;
@@ -111,7 +113,6 @@ namespace network {
     typedef string_type::const_iterator const_iterator;
     typedef const_iterator iterator;
     typedef std::iterator_traits<iterator>::value_type value_type;
-    typedef boost::string_ref string_view;
 
   private:
 
@@ -290,6 +291,11 @@ namespace network {
   inline
   bool operator >= (const uri &lhs, const uri &rhs) {
     return !(lhs < rhs);
+  }
+  
+  inline
+  bool operator == (const string_view lhs, const char* rhs) {
+    return std::equal(lhs.begin(), lhs.end(), rhs) && !rhs[lhs.size() + 1];
   }
 } // namespace network
 
