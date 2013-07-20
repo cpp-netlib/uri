@@ -158,10 +158,13 @@ namespace network {
     bool opaque() const NETWORK_URI_NOEXCEPT { return is_opaque(); }
 
     uri normalize(uri_comparison_level level) const;
+    uri normalize(uri_comparison_level level, std::error_code &ec) const NETWORK_URI_NOEXCEPT;
     uri make_reference(const uri &other, uri_comparison_level level) const;
+    uri make_reference(const uri &other, uri_comparison_level level, std::error_code &ec) const NETWORK_URI_NOEXCEPT;
     uri resolve(const uri &other, uri_comparison_level level) const;
+    uri resolve(const uri &other, uri_comparison_level level, std::error_code &ec) const NETWORK_URI_NOEXCEPT;
 
-    int compare(const uri &other, uri_comparison_level level) const;
+    int compare(const uri &other, uri_comparison_level level) const NETWORK_URI_NOEXCEPT;
 
     template <typename InputIter, typename OutputIter>
     static OutputIter encode_user_info(InputIter first, InputIter last, OutputIter out) {
