@@ -59,6 +59,10 @@ namespace network {
   class NETWORK_URI_DECL uri {
 
     friend class uri_builder;
+    template <class InputIter>
+    friend uri make_uri(InputIter first, InputIter last, std::error_code &ec) NETWORK_URI_NOEXCEPT;
+    template <class Source>
+    friend uri make_uri(const Source &source, std::error_code &ec) NETWORK_URI_NOEXCEPT;
 
   public:
 
@@ -89,24 +93,10 @@ namespace network {
       }
     }
 
-    template <class InputIter>
-    explicit uri(InputIter first, InputIter last, std::error_code &ec) {
-      if (!initialize(string_type(first, last))) {
-	ec = make_error_code(uri_error::invalid_syntax);
-      }
-    }
-
     template <class Source>
     explicit uri(const Source &uri) {
       if (!initialize(detail::translate(uri))) {
 	throw uri_syntax_error();
-      }
-    }
-
-    template <class Source>
-    explicit uri(const Source &uri, std::error_code &ec) {
-      if (!initialize(detail::translate(uri))) {
-	ec = make_error_code(uri_error::invalid_syntax);
       }
     }
 
@@ -210,16 +200,24 @@ namespace network {
 
   };
 
-  template <class Source>
-  inline
-  uri make_uri(const Source &source, std::error_code &ec) NETWORK_URI_NOEXCEPT {
-    return uri(source, ec);
-  }
-
   template <class InputIter>
   inline
   uri make_uri(InputIter first, InputIter last, std::error_code &ec) NETWORK_URI_NOEXCEPT {
-    return uri(first, last, ec);
+    uri uri_;
+    if (!uri_.initialize(string_type(first, last))) {
+      ec = make_error_code(uri_error::invalid_syntax);
+    }
+    return uri_;
+  }
+
+  template <class Source>
+  inline
+  uri make_uri(const Source &source, std::error_code &ec) NETWORK_URI_NOEXCEPT {
+    uri uri_;
+    if (!uri_.initialize(detail::translate(source))) {
+      ec = make_error_code(uri_error::invalid_syntax);
+    }
+    return uri_;
   }
 
   void swap(uri &lhs, uri &rhs) NETWORK_URI_NOEXCEPT;
