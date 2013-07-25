@@ -431,6 +431,16 @@ namespace network {
     return uri(normalized);
   }
 
+  uri uri::normalize(uri_comparison_level level, std::error_code &ec) const NETWORK_URI_NOEXCEPT {
+    try {
+      return normalize(level);
+    }
+    catch (std::bad_alloc &) {
+
+    }
+    return uri();
+  }
+
   uri uri::make_reference(const uri &other, uri_comparison_level level) const {
     if (is_opaque() || other.is_opaque()) {
       return other;
@@ -471,6 +481,16 @@ namespace network {
 		      boost::optional<string_type>(),
 		      other_path, query, fragment);
     return std::move(result);
+  }
+
+  uri uri::make_reference(const uri &other, uri_comparison_level level, std::error_code &ec) const NETWORK_URI_NOEXCEPT {
+    try {
+      return make_reference(other, level);
+    }
+    catch (std::bad_alloc &) {
+
+    }
+    return uri();
   }
 
   namespace detail {
@@ -545,6 +565,17 @@ namespace network {
     return std::move(result);
   }
 
+  uri uri::resolve(const uri &reference, uri_comparison_level level, std::error_code &ec) const NETWORK_URI_NOEXCEPT {
+    try {
+      return resolve(reference, level);
+    }
+    catch (std::bad_alloc &) {
+
+    }
+    return uri();
+  }
+
+
   int uri::compare(const uri &other, uri_comparison_level level) const NETWORK_URI_NOEXCEPT {
     // if both URIs are empty, then we should define them as equal
     // even though they're still invalid.
@@ -560,7 +591,8 @@ namespace network {
       return 1;
     }
 
-    return normalize(level).native().compare(other.normalize(level).native());
+    std::error_code ec, other_ec;
+    return normalize(level, ec).uri_.compare(other.normalize(level, other_ec).uri_);
   }
 
   bool uri::initialize(const string_type &uri) {
