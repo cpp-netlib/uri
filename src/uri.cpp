@@ -194,10 +194,11 @@ uri &uri::operator=(uri other) {
 }
 
 void uri::swap(uri &other) noexcept {
+  auto tmp_uri_parts = uri_parts_;
   advance_parts(other.uri_view_, uri_parts_, other.uri_parts_);
   uri_.swap(other.uri_);
   uri_view_.swap(other.uri_view_);
-  advance_parts(other.uri_view_, other.uri_parts_, uri_parts_);
+  advance_parts(other.uri_view_, other.uri_parts_, tmp_uri_parts);
 }
 
 uri::const_iterator uri::begin() const noexcept { return uri_view_.begin(); }
