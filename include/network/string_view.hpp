@@ -161,9 +161,8 @@ class basic_string_view {
   }
 
   constexpr int compare(basic_string_view s) const noexcept {
-    if (size() != s.size())
-        return size() < s.size() ? -1 : 1;
-    return traits::compare(data(), s.data(), size());
+    return (size() != s.size()) ? (size() < s.size()) ? -1 : 1
+                                : traits::compare(data(), s.data(), size());
   }
 
   constexpr int compare(size_type pos1, size_type n1,
