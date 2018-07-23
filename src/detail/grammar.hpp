@@ -17,7 +17,7 @@ namespace detail {
 inline bool isalnum(string_view::const_iterator &it,
                     string_view::const_iterator last) {
   if (it != last) {
-    if (std::isalnum(*it, std::locale("C"))) {
+    if (std::isalnum(*it, std::locale::classic())) {
       ++it;
       return true;
     }
@@ -28,7 +28,7 @@ inline bool isalnum(string_view::const_iterator &it,
 inline bool isdigit(string_view::const_iterator &it,
                     string_view::const_iterator last) {
   if (it != last) {
-    if (std::isdigit(*it, std::locale("C"))) {
+    if (std::isdigit(*it, std::locale::classic())) {
       ++it;
       return true;
     }
@@ -91,14 +91,14 @@ inline bool is_pct_encoded(string_view::const_iterator &it,
     }
   }
 
-  if (std::isxdigit(*it_copy, std::locale("C"))) {
+  if (std::isxdigit(*it_copy, std::locale::classic())) {
     ++it_copy;
     if (it_copy == last) {
       return false;
     }
   }
 
-  if (std::isxdigit(*it_copy, std::locale("C"))) {
+  if (std::isxdigit(*it_copy, std::locale::classic())) {
     ++it_copy;
     it = it_copy;
     return true;
