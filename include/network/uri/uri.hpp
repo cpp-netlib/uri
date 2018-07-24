@@ -590,6 +590,56 @@ class uri {
     return detail::decode(first, last, out);
   }
 
+  /**
+  * \brief Equality operator for the \c uri.
+  */
+  friend bool operator==(const uri &lhs, const uri &rhs) noexcept;
+
+  /**
+   * \brief Equality operator for the \c uri.
+   */
+  friend bool operator==(const uri &lhs, const char *rhs) noexcept;
+
+  /**
+   * \brief Equality operator for the \c uri.
+   */
+  friend inline bool operator==(const char *lhs, const uri &rhs) noexcept {
+    return rhs == lhs;
+  }
+
+  /**
+   * \brief Inequality operator for the \c uri.
+   */
+  friend inline bool operator!=(const uri &lhs, const uri &rhs) noexcept {
+    return !(lhs == rhs);
+  }
+
+  /**
+   * \brief Less-than operator for the \c uri.
+   */
+  friend bool operator<(const uri &lhs, const uri &rhs) noexcept;
+
+  /**
+   * \brief Greater-than operator for the \c uri.
+   */
+  friend inline bool operator>(const uri &lhs, const uri &rhs) noexcept {
+    return rhs < lhs;
+  }
+
+  /**
+   * \brief Less-than-or-equal-to operator for the \c uri.
+   */
+  friend inline bool operator<=(const uri &lhs, const uri &rhs) noexcept {
+    return !(rhs < lhs);
+  }
+
+  /**
+   * \brief Greater-than-or-equal-to operator for the \c uri.
+   */
+  friend inline bool operator>=(const uri &lhs, const uri &rhs) noexcept {
+    return !(lhs < rhs);
+  }
+
  private:
   bool initialize(const string_type &uri);
 
@@ -629,55 +679,6 @@ inline uri make_uri(const Source &source, std::error_code &ec) {
  */
 void swap(uri &lhs, uri &rhs) noexcept;
 
-/**
-* \brief Equality operator for the \c uri.
-*/
-bool operator==(const uri &lhs, const uri &rhs) noexcept;
-
-/**
- * \brief Equality operator for the \c uri.
- */
-bool operator==(const uri &lhs, const char *rhs) noexcept;
-
-/**
- * \brief Equality operator for the \c uri.
- */
-inline bool operator==(const char *lhs, const uri &rhs) noexcept {
-  return rhs == lhs;
-}
-
-/**
- * \brief Inequality operator for the \c uri.
- */
-inline bool operator!=(const uri &lhs, const uri &rhs) noexcept {
-  return !(lhs == rhs);
-}
-
-/**
- * \brief Less-than operator for the \c uri.
- */
-bool operator<(const uri &lhs, const uri &rhs) noexcept;
-
-/**
- * \brief Greater-than operator for the \c uri.
- */
-inline bool operator>(const uri &lhs, const uri &rhs) noexcept {
-  return rhs < lhs;
-}
-
-/**
- * \brief Less-than-or-equal-to operator for the \c uri.
- */
-inline bool operator<=(const uri &lhs, const uri &rhs) noexcept {
-  return !(rhs < lhs);
-}
-
-/**
- * \brief Greater-than-or-equal-to operator for the \c uri.
- */
-inline bool operator>=(const uri &lhs, const uri &rhs) noexcept {
-  return !(lhs < rhs);
-}
 }  // namespace network
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)

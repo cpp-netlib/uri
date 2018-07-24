@@ -685,18 +685,15 @@ bool uri::initialize(const string_type &uri) {
 void swap(uri &lhs, uri &rhs) noexcept { lhs.swap(rhs); }
 
 bool operator==(const uri &lhs, const uri &rhs) noexcept {
-  return lhs.compare(rhs, uri_comparison_level::syntax_based) == 0;
+  return lhs.uri_view_ == rhs.uri_view_;
 }
 
 bool operator==(const uri &lhs, const char *rhs) noexcept {
-  if (std::strlen(rhs) !=
-      std::size_t(std::distance(std::begin(lhs), std::end(lhs)))) {
-    return false;
-  }
-  return std::equal(std::begin(lhs), std::end(lhs), rhs);
+  return lhs.uri_view_ == rhs;
 }
 
 bool operator<(const uri &lhs, const uri &rhs) noexcept {
-  return lhs.compare(rhs, uri_comparison_level::syntax_based) < 0;
+  return lhs.uri_view_ < rhs.uri_view_;
 }
+
 }  // namespace network
