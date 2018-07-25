@@ -689,7 +689,7 @@ bool operator==(const uri &lhs, const uri &rhs) noexcept {
 }
 
 bool operator==(const uri &lhs, const char *rhs) noexcept {
-  return lhs.uri_view_ == rhs;
+  return lhs.uri_view_ == string_view{rhs};
 }
 
 bool operator<(const uri &lhs, const uri &rhs) noexcept {
