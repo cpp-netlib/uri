@@ -70,7 +70,7 @@ TEST(uri_comparison_test, inequality_test) {
 TEST(uri_comparison_test, less_than_test) {
   // lhs is lexicographically less than rhs
   network::uri lhs("http://www.example.com/");
-  network::uri rhs("http://www.example.com/path");
+  network::uri rhs("http://www.example.org/");
   ASSERT_LT(lhs, rhs);
 }
 
