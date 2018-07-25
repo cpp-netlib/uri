@@ -417,6 +417,12 @@ class uri {
   std::u32string u32string() const;
 
   /**
+   * \brief Returns the URI as a string_view object.
+   * \returns A URI string view.
+   */
+  string_view view() const noexcept;
+
+  /**
    * \brief Checks if the uri object is empty, i.e. it has no parts.
    * \returns \c true if there are no parts, \c false otherwise.
    */

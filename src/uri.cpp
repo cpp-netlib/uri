@@ -446,6 +446,10 @@ std::u32string uri::u32string() const {
   return std::u32string(std::begin(*this), std::end(*this));
 }
 
+uri::string_view uri::view() const noexcept {
+  return uri_view_;
+}
+
 bool uri::empty() const noexcept { return uri_.empty(); }
 
 bool uri::is_absolute() const noexcept { return has_scheme(); }
@@ -685,18 +689,15 @@ bool uri::initialize(const string_type &uri) {
 void swap(uri &lhs, uri &rhs) noexcept { lhs.swap(rhs); }
 
 bool operator==(const uri &lhs, const uri &rhs) noexcept {
-  return lhs.compare(rhs, uri_comparison_level::syntax_based) == 0;
+  return lhs.view() == rhs.view();
 }
 
 bool operator==(const uri &lhs, const char *rhs) noexcept {
-  if (std::strlen(rhs) !=
-      std::size_t(std::distance(std::begin(lhs), std::end(lhs)))) {
-    return false;
-  }
-  return std::equal(std::begin(lhs), std::end(lhs), rhs);
+  return lhs.view() == string_view{rhs};
 }
 
 bool operator<(const uri &lhs, const uri &rhs) noexcept {
-  return lhs.compare(rhs, uri_comparison_level::syntax_based) < 0;
+  return lhs.view() < rhs.view();
 }
+
 }  // namespace network
