@@ -129,11 +129,8 @@ void uri::initialize(optional<string_type> scheme,
     if (*it == ':') {
       ++it;
     }
-    if (*it == '/') {
-      ++it;
-      if (*it == '/') {
-        ++it;
-      }
+    if (*it == '/' && *(it + 1) == '/') {
+      it += 2;
     }
   }
 

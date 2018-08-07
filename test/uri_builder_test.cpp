@@ -764,3 +764,14 @@ TEST(builder_test, non_const_non_array_string_literals_should_work) {
     ;
   ASSERT_EQ("http://example.com/foo", builder.uri());
 }
+
+TEST(builder_test, scheme_and_absolute_path) {
+  network::uri_builder builder;
+  builder
+    .scheme("foo")
+    .path("/bar")
+    ;
+  ASSERT_EQ("foo:/bar", builder.uri());
+  ASSERT_EQ("foo", builder.uri().scheme());
+  ASSERT_EQ("/bar", builder.uri().path());
+}
