@@ -58,6 +58,13 @@ struct hierarchical_part {
   optional<uri_part> host;
   optional<uri_part> port;
   optional<uri_part> path;
+
+  void clear() {
+    user_info = nullopt;
+    host = nullopt;
+    port = nullopt;
+    path = nullopt;
+  }
 };
 
 struct uri_parts {
@@ -67,6 +74,13 @@ struct uri_parts {
   hierarchical_part hier_part;
   optional<uri_part> query;
   optional<uri_part> fragment;
+
+  void clear() {
+    scheme = nullopt;
+    hier_part.clear();
+    query = nullopt;
+    fragment = nullopt;
+  }
 };
 }  // namespace detail
 }  // namespace network

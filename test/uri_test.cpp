@@ -1058,3 +1058,14 @@ TEST(uri_test, uri_has_host_bug_88_2) {
 
   EXPECT_EQ("example.com", instance.host().to_string());
 }
+
+TEST(uri_test, assignment_operator_bug_116) {
+  network::uri a("http://a.com:1234");
+  ASSERT_TRUE(a.has_port());
+
+  const network::uri b("http://b.com");
+  ASSERT_FALSE(b.has_port());
+
+  a = b;
+  ASSERT_FALSE(a.has_port()) << a.string() << ", " << a.port();
+}
