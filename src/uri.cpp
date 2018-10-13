@@ -196,7 +196,9 @@ void uri::swap(uri &other) noexcept {
   other.uri_view_ = other.uri_;
 
   const auto this_parts = uri_parts_;
+  uri_parts_.clear();
   detail::advance_parts(uri_view_, uri_parts_, other.uri_parts_);
+  other.uri_parts_.clear();
   detail::advance_parts(other.uri_view_, other.uri_parts_, this_parts);
 }
 

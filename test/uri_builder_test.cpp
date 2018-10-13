@@ -775,3 +775,26 @@ TEST(builder_test, scheme_and_absolute_path) {
   ASSERT_EQ("foo", builder.uri().scheme());
   ASSERT_EQ("/bar", builder.uri().path());
 }
+
+TEST(builder_test, assignment_operator_bug_116) {
+  // https://github.com/cpp-netlib/uri/issues/116
+  network::uri a("http://a.com:1234");
+  ASSERT_TRUE(a.has_port());
+
+  const network::uri b("http://b.com");
+  ASSERT_FALSE(b.has_port());
+
+  a = b;
+  ASSERT_FALSE(a.has_port()) << a.string();
+}
+
+TEST(builder_test, construct_from_uri_bug_116) {
+  // https://github.com/cpp-netlib/uri/issues/116
+  network::uri a("http://a.com:1234");
+  const network::uri b("http://b.com");
+  a = b;
+
+  network::uri_builder ub(a);  // ASAN reports heap-use-after-free here
+  const network::uri c(ub.uri());
+  ASSERT_FALSE(c.has_port()) << c.string();
+}
