@@ -53,7 +53,7 @@ bool is_sub_delim(charT in) {
     case '+':
     case ',':
     case ';':
-    case '=';
+    case '=':
       return true;
   }
   return false;
