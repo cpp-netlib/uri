@@ -199,22 +199,15 @@ class uri_builder {
   uri_builder &clear_query();
 
   /**
-   * \brief Adds a new query to the uri_builder.
+   * \brief Adds a new query key/value pair to the uri_builder.
    * \param key The query key.
    * \param value The query value.
    * \returns \c *this
    */
   template <typename Key, typename Value>
-    uri_builder &append_query_key_value_pair(const Key &key, const Value &value) {
-    if (!query_) {
-      query_ = string_type();
-    }
-    else {
-      query_->append("&");
-    }
-    string_type query_pair = detail::translate(key) + "=" + detail::translate(value);
-    network::uri::encode_query(std::begin(query_pair), std::end(query_pair),
-                               std::back_inserter(*query_));
+  uri_builder &append_query_key_value_pair(const Key &key, const Value &value) {
+    append_query_key_value_pair(detail::translate(key),
+                                detail::translate(value));
     return *this;
   }
 
@@ -253,6 +246,7 @@ class uri_builder {
   void set_authority(string_type authority);
   void set_path(string_type path);
   void append_query(string_type query);
+  void append_query_key_value_pair(string_type key, string_type value);
   void set_fragment(string_type fragment);
 
   optional<string_type> scheme_, user_info_, host_, port_, path_, query_,
