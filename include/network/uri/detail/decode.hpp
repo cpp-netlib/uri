@@ -40,10 +40,6 @@ InputIterator decode_char(InputIterator it, charT *out) {
   ++it;
   auto h1 = *it;
   auto v1 = detail::letter_to_hex(h1);
-  if (h0 >= '8') {
-    // unable to decode characters outside the ASCII character set.
-    throw percent_decoding_error(uri_error::conversion_failed);
-  }
   ++it;
   *out = static_cast<charT>((0x10 * v0) + v1);
   return it;
