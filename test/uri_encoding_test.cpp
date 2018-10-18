@@ -54,7 +54,7 @@ TEST(uri_encoding_test, encode_query_iterator) {
   std::string instance;
   network::uri::encode_query(std::begin(unencoded), std::end(unencoded),
 			     std::back_inserter(instance));
-  ASSERT_EQ("%21%23%24%26%27%28%29%2A%2B%2C/%3A;=%3F@%5B%5D", instance);
+  ASSERT_EQ("%21%23%24&%27%28%29%2A%2B%2C/%3A;=%3F@%5B%5D", instance);
 }
 
 TEST(uri_encoding_test, encode_fragment_iterator) {
