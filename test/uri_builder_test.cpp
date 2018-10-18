@@ -600,7 +600,7 @@ TEST(builder_test, build_uri_with_query_item_with_encoded_chars)
     .append_query_key_value_pair("a", "parameter with encoded chars!")
     .path("/")
     ;
-    ASSERT_EQ("http://www.example.com/?a=parameter%20with%20encoded%20chars%21", builder.uri().string());
+    ASSERT_EQ("http://www.example.com/?a=parameter%20with%20encoded%20chars!", builder.uri().string());
 }
 
 TEST(builder_test, build_uri_with_multiple_query_items_with_encoded_chars) {
@@ -612,7 +612,7 @@ TEST(builder_test, build_uri_with_multiple_query_items_with_encoded_chars) {
     .append_query_key_value_pair("b", "second parameter with encoded chars!")
     .path("/")
     ;
-    ASSERT_EQ("http://www.example.com/?a=first%20parameter%20with%20encoded%20chars%21&b=second%20parameter%20with%20encoded%20chars%21", builder.uri().string());
+    ASSERT_EQ("http://www.example.com/?a=first%20parameter%20with%20encoded%20chars!&b=second%20parameter%20with%20encoded%20chars!", builder.uri().string());
 }
 
 TEST(builder_test, construct_from_existing_uri) {
