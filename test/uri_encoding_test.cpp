@@ -134,3 +134,13 @@ TEST(uri_encoding_test, decode_iterator_not_an_error_2) {
   ASSERT_NO_THROW(network::uri::decode(std::begin(encoded), std::end(encoded),
 				       std::back_inserter(instance)));
 }
+
+TEST(uri_encoding_test, decode_accepts_utf8) {
+  const std::string encoded("%EB%B2%95%EC%A0%95%EB%8F%99");
+  std::string instance;
+  ASSERT_NO_THROW(network::uri::decode(std::begin(encoded), std::end(encoded),
+               std::back_inserter(instance)));
+
+  const std::string unencoded = u8"법정동";
+  ASSERT_EQ(unencoded, instance);
+}
