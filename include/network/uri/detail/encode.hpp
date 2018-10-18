@@ -61,13 +61,7 @@ bool is_sub_delim(charT in) {
 
 template <class charT, class OutputIterator>
 void encode_char(charT in, OutputIterator &out, const char *ignore = "") {
-  if (((in >= 'a') && (in <= 'z')) ||
-      ((in >= 'A') && (in <= 'Z')) ||
-      ((in >= '0') && (in <= '9')) ||
-      (in == '-') ||
-      (in == '.') ||
-      (in == '_') ||
-      (in == '~')) {
+  if (is_unreserved(in)) {
     out++ = in;
   } else {
     auto first = ignore, last = ignore + std::strlen(ignore);
