@@ -60,6 +60,13 @@ bool is_sub_delim(charT in) {
 }
 
 template <class charT, class OutputIterator>
+void percent_encode(charT in, OutputIterator &out) {
+  out++ = '%';
+  out++ = hex_to_letter((in >> 4) & 0x0f);
+  out++ = hex_to_letter(in & 0x0f);
+}
+
+template <class charT, class OutputIterator>
 void encode_char(charT in, OutputIterator &out, const char *ignore = "") {
   if (is_unreserved(in)) {
     out++ = in;
@@ -68,9 +75,7 @@ void encode_char(charT in, OutputIterator &out, const char *ignore = "") {
     if (std::find(first, last, in) != last) {
       out++ = in;
     } else {
-      out++ = '%';
-      out++ = hex_to_letter((in >> 4) & 0x0f);
-      out++ = hex_to_letter(in & 0x0f);
+      percent_encode(in, out);
     }
   }
 }
