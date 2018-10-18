@@ -47,25 +47,6 @@ bool is_unreserved(charT in) {
          (in == '~');
 }
 
-template <class charT>
-bool is_sub_delim(charT in) {
-  switch (in) {
-    case '!':
-    case '$':
-    case '&':
-    case '\'':
-    case '(':
-    case ')':
-    case '*':
-    case '+':
-    case ',':
-    case ';':
-    case '=':
-      return true;
-  }
-  return false;
-}
-
 template <class charT, class OutputIterator>
 void encode_char(charT in, OutputIterator &out, const char *ignore = "") {
   if (is_unreserved(in)) {
