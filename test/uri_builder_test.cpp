@@ -805,12 +805,6 @@ TEST(builder_test, append_query_key_value_pair_encodes_equals_sign) {
   ASSERT_EQ(network::string_view("%3D"), ub.uri().query_begin()->second);
 }
 
-TEST(builder_test, append_query_key_value_pair_encodes_question_mark) {
-  network::uri_builder ub(network::uri("http://example.com"));
-  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "?"));
-  ASSERT_EQ(network::string_view("%3F"), ub.uri().query_begin()->second);
-}
-
 TEST(builder_test, append_query_key_value_pair_encodes_number_sign) {
   network::uri_builder ub(network::uri("http://example.com"));
   ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "#"));
@@ -827,4 +821,18 @@ TEST(builder_test, append_query_key_value_pair_encodes_ampersand) {
   network::uri_builder ub(network::uri("http://example.com"));
   ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "&"));
   ASSERT_EQ(network::string_view("%26"), ub.uri().query_begin()->second);
+}
+
+TEST(builder_test, append_query_key_value_pair_does_not_encode_slash) {
+  // https://tools.ietf.org/html/rfc3986#section-3.4
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "/"));
+  ASSERT_EQ(network::string_view("/"), ub.uri().query_begin()->second);
+}
+
+TEST(builder_test, append_query_key_value_pair_does_not_encode_qmark) {
+  // https://tools.ietf.org/html/rfc3986#section-3.4
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "?"));
+  ASSERT_EQ(network::string_view("?"), ub.uri().query_begin()->second);
 }

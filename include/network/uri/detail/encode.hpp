@@ -121,7 +121,7 @@ OutputIterator encode_query_component(InputIterator first, InputIterator last,
                                       OutputIterator out) {
   auto it = first;
   while (it != last) {
-    detail::encode_char(*it, out);
+    detail::encode_char(*it, out, "/?");
     ++it;
   }
   return out;
