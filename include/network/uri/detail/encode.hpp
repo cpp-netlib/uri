@@ -80,6 +80,15 @@ void encode_char(charT in, OutputIterator &out, const char *ignore = "") {
   }
 }
 
+template <class charT, class OutputIterator>
+void encode_pchar(charT in, OutputIterator &out) {
+  if (is_unreserved(in) || is_sub_delim(in) || (in == ':') || (in == '@')) {
+    out++ = in;
+  } else {
+    percent_encode(in, out);
+  }
+}
+
 template <typename InputIterator, typename OutputIterator>
 OutputIterator encode_user_info(InputIterator first, InputIterator last,
                                 OutputIterator out) {
