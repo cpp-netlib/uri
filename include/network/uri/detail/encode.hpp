@@ -29,6 +29,36 @@ inline CharT hex_to_letter(CharT in) {
   return in;
 }
 
+template <class charT>
+bool is_unreserved(charT in) {
+  return ((in >= 'a') && (in <= 'z')) ||
+         ((in >= 'A') && (in <= 'Z')) ||
+         ((in >= '0') && (in <= '9')) ||
+         (in == '-') ||
+         (in == '.') ||
+         (in == '_') ||
+         (in == '~');
+}
+
+template <class charT>
+bool is_sub_delim(charT in) {
+  switch (in) {
+    case '!':
+    case '$':
+    case '&':
+    case '\'':
+    case '(':
+    case ')':
+    case '*':
+    case '+':
+    case ',':
+    case ';':
+    case '=';
+      return true;
+  }
+  return false;
+}
+
 template <class charT, class OutputIterator>
 void encode_char(charT in, OutputIterator &out, const char *ignore = "") {
   if (((in >= 'a') && (in <= 'z')) ||
