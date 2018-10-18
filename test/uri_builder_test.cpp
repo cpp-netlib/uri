@@ -798,3 +798,33 @@ TEST(builder_test, construct_from_uri_bug_116) {
   const network::uri c(ub.uri());
   ASSERT_FALSE(c.has_port()) << c.string();
 }
+
+TEST(builder_test, append_query_key_value_pair_encodes_equals_sign) {
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "="));
+  ASSERT_EQ(network::string_view("%3D"), ub.uri().query_begin()->second);
+}
+
+TEST(builder_test, append_query_key_value_pair_encodes_question_mark) {
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "?"));
+  ASSERT_EQ(network::string_view("%3F"), ub.uri().query_begin()->second);
+}
+
+TEST(builder_test, append_query_key_value_pair_encodes_number_sign) {
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "#"));
+  ASSERT_EQ(network::string_view("%23"), ub.uri().query_begin()->second);
+}
+
+TEST(builder_test, append_query_key_value_pair_encodes_percent_sign) {
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "%"));
+  ASSERT_EQ(network::string_view("%25"), ub.uri().query_begin()->second);
+}
+
+TEST(builder_test, append_query_key_value_pair_encodes_ampersand) {
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "&"));
+  ASSERT_EQ(network::string_view("%26"), ub.uri().query_begin()->second);
+}
