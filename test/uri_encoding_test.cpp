@@ -141,6 +141,7 @@ TEST(uri_encoding_test, decode_accepts_utf8) {
   ASSERT_NO_THROW(network::uri::decode(std::begin(encoded), std::end(encoded),
                std::back_inserter(instance)));
 
-  const std::string unencoded = u8"법정동";
+  // const std::string unencoded = "법정동";
+  const std::string unencoded = "\xEB\xB2\x95\xEC\xA0\x95\xEB\x8F\x99";
   ASSERT_EQ(unencoded, instance);
 }
