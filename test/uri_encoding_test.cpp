@@ -10,7 +10,7 @@
 
 
 TEST(uri_encoding_test, encode_user_info_iterator) {
-  const std::string unencoded("!#$&\'()*+,/:;=?@[]");
+  const std::string unencoded("!#$&'()*+,/:;=?@[]");
   std::string instance;
   network::uri::encode_user_info(std::begin(unencoded), std::end(unencoded),
 				 std::back_inserter(instance));
@@ -18,7 +18,7 @@ TEST(uri_encoding_test, encode_user_info_iterator) {
 }
 
 TEST(uri_encoding_test, encode_host_iterator) {
-  const std::string unencoded("!#$&\'()*+,/:;=?@[]");
+  const std::string unencoded("!#$&'()*+,/:;=?@[]");
   std::string instance;
   network::uri::encode_host(std::begin(unencoded), std::end(unencoded),
 			    std::back_inserter(instance));
@@ -34,7 +34,7 @@ TEST(uri_encoding_test, encode_ipv6_host) {
 }
 
 TEST(uri_encoding_test, encode_port_iterator) {
-  const std::string unencoded("!#$&\'()*+,/:;=?@[]");
+  const std::string unencoded("!#$&'()*+,/:;=?@[]");
   std::string instance;
   network::uri::encode_port(std::begin(unencoded), std::end(unencoded),
 			    std::back_inserter(instance));
@@ -42,7 +42,7 @@ TEST(uri_encoding_test, encode_port_iterator) {
 }
 
 TEST(uri_encoding_test, encode_path_iterator) {
-  const std::string unencoded("!#$&\'()*+,/:;=?@[]");
+  const std::string unencoded("!#$&'()*+,/:;=?@[]");
   std::string instance;
   network::uri::encode_path(std::begin(unencoded), std::end(unencoded),
 			    std::back_inserter(instance));
@@ -50,7 +50,7 @@ TEST(uri_encoding_test, encode_path_iterator) {
 }
 
 TEST(uri_encoding_test, encode_query_iterator) {
-  const std::string unencoded("!#$&\'()*+,/:;=?@[]");
+  const std::string unencoded("!#$&'()*+,/:;=?@[]");
   std::string instance;
   network::uri::encode_query(std::begin(unencoded), std::end(unencoded),
 			     std::back_inserter(instance));
@@ -58,7 +58,7 @@ TEST(uri_encoding_test, encode_query_iterator) {
 }
 
 TEST(uri_encoding_test, encode_fragment_iterator) {
-  const std::string unencoded("!#$&\'()*+,/:;=?@[]");
+  const std::string unencoded("!#$&'()*+,/:;=?@[]");
   std::string instance;
   network::uri::encode_fragment(std::begin(unencoded), std::end(unencoded),
 				std::back_inserter(instance));
@@ -70,7 +70,7 @@ TEST(uri_encoding_test, decode_iterator) {
   std::string instance;
   network::uri::decode(std::begin(encoded), std::end(encoded),
 		       std::back_inserter(instance));
-  ASSERT_EQ("!#$&\'()*+,/:;=?@[]", instance);
+  ASSERT_EQ("!#$&'()*+,/:;=?@[]", instance);
 }
 
 TEST(uri_encoding_test, decode_iterator_error_1) {
