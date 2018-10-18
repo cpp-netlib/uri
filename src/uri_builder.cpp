@@ -122,6 +122,19 @@ void uri_builder::append_query(string_type query) {
                              std::back_inserter(*query_));
 }
 
+void uri_builder::append_query_key_value_pair(string_type key, string_type value) {
+  if (!query_) {
+    query_ = string_type();
+  } else {
+    query_->push_back('&');
+  }
+  detail::encode_query_component(std::begin(key), std::end(key),
+                                 std::back_inserter(*query_));
+  query_->push_back('=');
+  detail::encode_query_component(std::begin(value), std::end(value),
+                                 std::back_inserter(*query_));
+}
+
 uri_builder &uri_builder::clear_query() {
   query_ = network::nullopt;
   return *this;

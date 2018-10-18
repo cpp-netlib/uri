@@ -794,7 +794,45 @@ TEST(builder_test, construct_from_uri_bug_116) {
   const network::uri b("http://b.com");
   a = b;
 
-  network::uri_builder ub(a);  // ASAN reports heap-use-after-free here
+  network::uri_builder ub(a);
   const network::uri c(ub.uri());
   ASSERT_FALSE(c.has_port()) << c.string();
+}
+
+TEST(builder_test, append_query_key_value_pair_encodes_equals_sign) {
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "="));
+  ASSERT_EQ(network::string_view("%3D"), ub.uri().query_begin()->second);
+}
+
+TEST(builder_test, append_query_key_value_pair_encodes_number_sign) {
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "#"));
+  ASSERT_EQ(network::string_view("%23"), ub.uri().query_begin()->second);
+}
+
+TEST(builder_test, append_query_key_value_pair_encodes_percent_sign) {
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "%"));
+  ASSERT_EQ(network::string_view("%25"), ub.uri().query_begin()->second);
+}
+
+TEST(builder_test, append_query_key_value_pair_encodes_ampersand) {
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "&"));
+  ASSERT_EQ(network::string_view("%26"), ub.uri().query_begin()->second);
+}
+
+TEST(builder_test, append_query_key_value_pair_does_not_encode_slash) {
+  // https://tools.ietf.org/html/rfc3986#section-3.4
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "/"));
+  ASSERT_EQ(network::string_view("/"), ub.uri().query_begin()->second);
+}
+
+TEST(builder_test, append_query_key_value_pair_does_not_encode_qmark) {
+  // https://tools.ietf.org/html/rfc3986#section-3.4
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "?"));
+  ASSERT_EQ(network::string_view("?"), ub.uri().query_begin()->second);
 }

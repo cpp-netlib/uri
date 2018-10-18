@@ -30,23 +30,33 @@ inline CharT hex_to_letter(CharT in) {
 }
 
 template <class charT, class OutputIterator>
+void percent_encode(charT in, OutputIterator &out) {
+  out++ = '%';
+  out++ = hex_to_letter((in >> 4) & 0x0f);
+  out++ = hex_to_letter(in & 0x0f);
+}
+
+template <class charT>
+bool is_unreserved(charT in) {
+  return ((in >= 'a') && (in <= 'z')) ||
+         ((in >= 'A') && (in <= 'Z')) ||
+         ((in >= '0') && (in <= '9')) ||
+         (in == '-') ||
+         (in == '.') ||
+         (in == '_') ||
+         (in == '~');
+}
+
+template <class charT, class OutputIterator>
 void encode_char(charT in, OutputIterator &out, const char *ignore = "") {
-  if (((in >= 'a') && (in <= 'z')) ||
-      ((in >= 'A') && (in <= 'Z')) ||
-      ((in >= '0') && (in <= '9')) ||
-      (in == '-') ||
-      (in == '.') ||
-      (in == '_') ||
-      (in == '~')) {
+  if (is_unreserved(in)) {
     out++ = in;
   } else {
     auto first = ignore, last = ignore + std::strlen(ignore);
     if (std::find(first, last, in) != last) {
       out++ = in;
     } else {
-      out++ = '%';
-      out++ = hex_to_letter((in >> 4) & 0x0f);
-      out++ = hex_to_letter(in & 0x0f);
+      percent_encode(in, out);
     }
   }
 }
@@ -101,6 +111,17 @@ OutputIterator encode_query(InputIterator first, InputIterator last,
   auto it = first;
   while (it != last) {
     detail::encode_char(*it, out, "/.@&%;=");
+    ++it;
+  }
+  return out;
+}
+
+template <typename InputIterator, typename OutputIterator>
+OutputIterator encode_query_component(InputIterator first, InputIterator last,
+                                      OutputIterator out) {
+  auto it = first;
+  while (it != last) {
+    detail::encode_char(*it, out, "/?");
     ++it;
   }
   return out;
