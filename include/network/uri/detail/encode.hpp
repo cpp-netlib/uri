@@ -81,11 +81,17 @@ void encode_char(charT in, OutputIterator &out, const char *ignore = "") {
 }
 
 template <class charT, class OutputIterator>
-void encode_pchar(charT in, OutputIterator &out) {
+void encode_pchar(charT in, OutputIterator &out, const char *ignore = "") {
   if (is_unreserved(in) || is_sub_delim(in) || (in == ':') || (in == '@')) {
     out++ = in;
   } else {
-    percent_encode(in, out);
+    auto first = ignore;
+    auto last = ignore + std::strlen(ignore);
+    if (std::find(first, last, in) != last) {
+      out++ = in;
+    } else {
+      percent_encode(in, out);
+    }
   }
 }
 
