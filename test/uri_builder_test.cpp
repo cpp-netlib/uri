@@ -794,7 +794,7 @@ TEST(builder_test, construct_from_uri_bug_116) {
   const network::uri b("http://b.com");
   a = b;
 
-  network::uri_builder ub(a);  // ASAN reports heap-use-after-free here
+  network::uri_builder ub(a);
   const network::uri c(ub.uri());
   ASSERT_FALSE(c.has_port()) << c.string();
 }
