@@ -9,8 +9,8 @@
 .. image:: https://travis-ci.org/cpp-netlib/uri.png?branch=master
   :target: https://travis-ci.org/cpp-netlib/uri
 
-.. image:: https://ci.appveyor.com/api/projects/status/hc10ha6ugl6ea90u?svg=true
-  :target: https://ci.appveyor.com/project/glynos/url-3aeqd
+.. image:: https://ci.appveyor.com/api/projects/status/rjt0nbbtdhsjdjv4?svg=true
+  :target: https://ci.appveyor.com/project/glynos/uri-6fkuc
   
 .. image:: https://img.shields.io/badge/license-boost-blue.svg
   :target: https://github.com/cpp-netlib/uri/blob/master/LICENSE_1_0.txt
