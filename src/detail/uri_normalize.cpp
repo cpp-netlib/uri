@@ -60,14 +60,14 @@ std::string normalize_path_segments(string_view path) {
       --last;
     }
 
-    normalized_segments.assign(first, last);
-    first = normalized_segments.begin();
-    last = normalized_segments.end();
+    std::vector<std::string> normalized_segments_tmp(first, last);
+    first = normalized_segments_tmp.begin();
+    last = normalized_segments_tmp.end();
     auto it = std::remove_if(first, last,
         [] (const std::string &s) { return s.empty(); });
-    normalized_segments.erase(it, last);
+    normalized_segments_tmp.erase(it, last);
 
-    result = network_boost::join(normalized_segments, "/");
+    result = network_boost::join(normalized_segments_tmp, "/");
 
     if (!result.empty() && last_segment_is_slash) {
       result += "/";
