@@ -196,3 +196,17 @@ TEST(uri_normalization_test, query_percent_encoded_unreserved) {
   ASSERT_EQ("http://www.example.com/?foo=alpha123-._~",
             instance.normalize(network::uri_comparison_level::syntax_based).string());
 }
+
+TEST(uri_test, path_adjacent_slashes_122) {
+  // https://github.com/cpp-netlib/uri/issues/122
+  network::uri instance("http://www.example.com/abc//elementary");
+  ASSERT_EQ("http://www.example.com/abc/elementary",
+            instance.normalize(network::uri_comparison_level::syntax_based).string());
+}
+
+TEST(uri_test, path_adjacent_slashes_122_part_2) {
+  // https://github.com/cpp-netlib/uri/issues/122
+  network::uri instance("http://www.example.com/abc//.//../elementary");
+  ASSERT_EQ("http://www.example.com/elementary",
+            instance.normalize(network::uri_comparison_level::syntax_based).string());
+}
