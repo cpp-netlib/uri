@@ -49,18 +49,33 @@ std::string normalize_path_segments(string_view path) {
     }
 
     // remove adjacent slashes
-    optional<std::string> prev_segment;
-    detail::remove_erase_if(
-        normalized_segments, [&prev_segment](const std::string& segment) {
-          bool has_adjacent_slash =
-              ((prev_segment && prev_segment->empty()) && segment.empty());
-          if (!has_adjacent_slash) {
-            prev_segment = segment;
-          }
-          return has_adjacent_slash;
-        });
+    bool first_segment_is_slash = normalized_segments.front().empty();
+    bool last_segment_is_slash = normalized_segments.back().empty();
+
+    auto first = normalized_segments.begin(), last = normalized_segments.end();
+    if (first_segment_is_slash) {
+      ++first;
+    }
+    if ((first != last) && last_segment_is_slash) {
+      --last;
+    }
+
+    normalized_segments.assign(first, last);
+    first = normalized_segments.begin();
+    last = normalized_segments.end();
+    auto it = std::remove_if(first, last,
+        [] (const std::string &s) { return s.empty(); });
+    normalized_segments.erase(it, last);
 
     result = network_boost::join(normalized_segments, "/");
+
+    if (!result.empty() && last_segment_is_slash) {
+      result += "/";
+    }
+
+    if (first_segment_is_slash) {
+      result = "/" + result;
+    }
   }
 
   if (result.empty()) {
