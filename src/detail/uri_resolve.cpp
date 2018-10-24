@@ -12,6 +12,7 @@
 #include <boost/algorithm/string/erase.hpp>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/predicate.hpp>
+namespace network_boost = boost;
 #else   // NETWORK_URI_EXTERNAL_BOOST
 #include "../boost/algorithm/string/find.hpp"
 #include "../boost/algorithm/string/erase.hpp"
