@@ -10,6 +10,7 @@
 #ifdef NETWORK_URI_EXTERNAL_BOOST
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/join.hpp>
+namespace network_boost = boost;
 #else   // NETWORK_URI_EXTERNAL_BOOST
 #include "../boost/algorithm/string/split.hpp"
 #include "../boost/algorithm/string/join.hpp"
@@ -50,7 +51,7 @@ std::string normalize_path_segments(string_view path) {
     for (const auto &segment : normalized_segments) {
       result += "/" + segment;
     }
-    
+
     if (last_segment_is_slash) {
       result += "/";
     }
