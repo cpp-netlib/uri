@@ -182,13 +182,29 @@ class uri_builder {
   uri_builder &clear_path();
 
   /**
+   * \deprecated Please use append_query_parameter
+   * \warning This function's behaviour has changed and percent encoding
+   *          of the '=' character is not ignored.
    * \brief Adds a new query to the uri_builder.
    * \param query The query.
    * \returns \c *this
+   * \sa append_query_parameter
    */
   template <typename Source>
   uri_builder &append_query(const Source &query) {
-    append_query(detail::translate(query));
+    return append_query_parameter(query);
+  }
+
+  /**
+   * \brief Adds a new query value to the uri_builder. The '='
+   *        symbol is percent encoded.
+   * \param parameter The query parameter.
+   * \returns \c *this
+   * \sa append_query_key_value_pair
+   */
+  template <typename Source>
+  uri_builder &append_query_parameter(const Source &parameter) {
+    append_query_parameter(detail::translate(parameter));
     return *this;
   }
 
@@ -245,7 +261,7 @@ class uri_builder {
   void set_port(string_type port);
   void set_authority(string_type authority);
   void set_path(string_type path);
-  void append_query(string_type query);
+  void append_query_parameter(string_type query);
   void append_query_key_value_pair(string_type key, string_type value);
   void set_fragment(string_type fragment);
 

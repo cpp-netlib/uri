@@ -32,7 +32,7 @@ uri_builder::uri_builder(const network::uri &base_uri) {
   }
 
   if (base_uri.has_query()) {
-    append_query(base_uri.query().to_string());
+    append_query_parameter(base_uri.query().to_string());
   }
 
   if (base_uri.has_fragment()) {
@@ -111,7 +111,7 @@ uri_builder &uri_builder::clear_path() {
   return *this;
 }
 
-void uri_builder::append_query(string_type query) {
+void uri_builder::append_query_parameter(string_type query) {
   if (!query_) {
     query_ = string_type();
   }
