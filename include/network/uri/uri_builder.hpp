@@ -198,13 +198,13 @@ class uri_builder {
   /**
    * \brief Adds a new query value to the uri_builder. The '='
    *        symbol is percent encoded.
-   * \param parameter The query parameter.
+   * \param name The query parameter.
    * \returns \c *this
    * \sa append_query_key_value_pair
    */
   template <typename Source>
-  uri_builder &append_query_parameter(const Source &parameter) {
-    append_query_parameter(detail::translate(parameter));
+  uri_builder &append_query_parameter(const Source &name) {
+    append_query_parameter(detail::translate(name));
     return *this;
   }
 
@@ -261,7 +261,7 @@ class uri_builder {
   void set_port(string_type port);
   void set_authority(string_type authority);
   void set_path(string_type path);
-  void append_query_parameter(string_type query);
+  void append_query_parameter(string_type name);
   void append_query_key_value_pair(string_type key, string_type value);
   void set_fragment(string_type fragment);
 

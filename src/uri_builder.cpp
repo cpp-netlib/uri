@@ -12,31 +12,31 @@
 namespace network {
 uri_builder::uri_builder(const network::uri &base_uri) {
   if (base_uri.has_scheme()) {
-    set_scheme(base_uri.scheme().to_string());
+    scheme_ = base_uri.scheme().to_string();
   }
 
   if (base_uri.has_user_info()) {
-    set_user_info(base_uri.user_info().to_string());
+    user_info_ = base_uri.user_info().to_string();
   }
 
   if (base_uri.has_host()) {
-    set_host(base_uri.host().to_string());
+    host_ = base_uri.host().to_string();
   }
 
   if (base_uri.has_port()) {
-    set_port(base_uri.port().to_string());
+    port_ = base_uri.port().to_string();
   }
 
   if (base_uri.has_path()) {
-    set_path(base_uri.path().to_string());
+    path_ = base_uri.path().to_string();
   }
 
   if (base_uri.has_query()) {
-    append_query_parameter(base_uri.query().to_string());
+    query_ = base_uri.query().to_string();
   }
 
   if (base_uri.has_fragment()) {
-    set_fragment(base_uri.fragment().to_string());
+    fragment_ = base_uri.fragment().to_string();
   }
 }
 
@@ -111,14 +111,14 @@ uri_builder &uri_builder::clear_path() {
   return *this;
 }
 
-void uri_builder::append_query_parameter(string_type query) {
+void uri_builder::append_query_parameter(string_type name) {
   if (!query_) {
     query_ = string_type();
   }
   else {
     query_->append("&");
   }
-  network::uri::encode_query(std::begin(query), std::end(query),
+  network::uri::encode_query(std::begin(name), std::end(name),
                              std::back_inserter(*query_));
 }
 

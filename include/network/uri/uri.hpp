@@ -560,7 +560,7 @@ class uri {
   template <typename InputIter, typename OutputIter>
   static OutputIter encode_query(InputIter first, InputIter last,
                                  OutputIter out) {
-    return detail::encode_query(first, last, out);
+    return detail::encode_query_component(first, last, out);
   }
 
   /**

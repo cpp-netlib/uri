@@ -838,3 +838,18 @@ TEST(builder_test, append_query_key_value_pair_does_not_encode_qmark) {
   ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "?"));
   ASSERT_EQ(network::string_view("?"), ub.uri().query_begin()->second);
 }
+
+TEST(builder_test, build_from_uri_with_encoded_user_info) {
+  network::uri_builder ub(network::uri("http://%40@example.com"));
+  ASSERT_EQ(network::string_view("%40"), ub.uri().user_info());
+}
+
+TEST(builder_test, build_from_uri_with_encoded_query) {
+  network::uri_builder ub(network::uri("http://example.com?x=%40"));
+  ASSERT_EQ(network::string_view("x=%40"), ub.uri().query());
+}
+
+TEST(builder_test, build_from_uri_with_encoded_fragment) {
+  network::uri_builder ub(network::uri("http://example.com#%40"));
+  ASSERT_EQ(network::string_view("%40"), ub.uri().fragment());
+}
