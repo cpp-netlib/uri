@@ -217,7 +217,7 @@ TEST(builder_test, full_uri_doesnt_throw) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
   ASSERT_NO_THROW(builder.uri());
@@ -231,10 +231,10 @@ TEST(builder_test, full_uri) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
-  ASSERT_EQ("http://user@www.example.com:80/path?query#fragment", builder.uri().string());
+  ASSERT_EQ("http://user@www.example.com:80/path?query=value#fragment", builder.uri().string());
 }
 
 TEST(builder_test, full_uri_has_scheme) {
@@ -245,7 +245,7 @@ TEST(builder_test, full_uri_has_scheme) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
   ASSERT_TRUE(builder.uri().has_scheme());
@@ -259,7 +259,7 @@ TEST(builder_test, full_uri_scheme_value) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
   ASSERT_EQ("http", builder.uri().scheme());
@@ -273,7 +273,7 @@ TEST(builder_test, full_uri_has_user_info) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
   ASSERT_TRUE(builder.uri().has_user_info());
@@ -287,7 +287,7 @@ TEST(builder_test, full_uri_user_info_value) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
   ASSERT_EQ("user", builder.uri().user_info());
@@ -301,7 +301,7 @@ TEST(builder_test, full_uri_has_host) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
   ASSERT_TRUE(builder.uri().has_host());
@@ -315,7 +315,7 @@ TEST(builder_test, full_uri_host_value) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
   ASSERT_EQ("www.example.com", builder.uri().host());
@@ -329,7 +329,7 @@ TEST(builder_test, full_uri_has_port) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
   ASSERT_TRUE(builder.uri().has_port());
@@ -343,7 +343,7 @@ TEST(builder_test, full_uri_has_path) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
   ASSERT_TRUE(builder.uri().has_path());
@@ -357,7 +357,7 @@ TEST(builder_test, full_uri_path_value) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
   ASSERT_EQ("/path", builder.uri().path());
@@ -371,7 +371,7 @@ TEST(builder_test, full_uri_has_query) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
   ASSERT_TRUE(builder.uri().has_query());
@@ -385,10 +385,10 @@ TEST(builder_test, full_uri_query_value) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
-  ASSERT_EQ("query", builder.uri().query());
+  ASSERT_EQ("query=value", builder.uri().query());
 }
 
 TEST(builder_test, full_uri_has_fragment) {
@@ -399,7 +399,7 @@ TEST(builder_test, full_uri_has_fragment) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
   ASSERT_TRUE(builder.uri().has_fragment());
@@ -413,7 +413,7 @@ TEST(builder_test, full_uri_fragment_value) {
     .host("www.example.com")
     .port("80")
     .path("/path")
-    .append_query("query")
+    .append_query_key_value_pair("query", "value")
     .fragment("fragment")
     ;
   ASSERT_EQ("fragment", builder.uri().fragment());
@@ -722,17 +722,6 @@ TEST(builder_test, set_multiple_query_with_encoding) {
   builder
     .scheme("http")
     .host("example.com")
-    .append_query("q1=foo bar")
-    .append_query("q2=biz baz")
-    ;
-  ASSERT_EQ("http://example.com?q1=foo%20bar&q2=biz%20baz", builder.uri().string());
-}
-
-TEST(builder_test, set_multiple_query_with_encoding_2) {
-  network::uri_builder builder;
-  builder
-    .scheme("http")
-    .host("example.com")
     .append_query_key_value_pair("q1", "foo bar")
     .append_query_key_value_pair("q2", "biz baz")
     ;
@@ -799,9 +788,22 @@ TEST(builder_test, construct_from_uri_bug_116) {
   ASSERT_FALSE(c.has_port()) << c.string();
 }
 
+TEST(builder_test, append_query_value) {
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_component("q"));
+  ASSERT_EQ(network::string_view("q"), ub.uri().query_begin()->first);
+}
+
+TEST(builder_test, append_query_value_encodes_equal_sign) {
+  network::uri_builder ub(network::uri("http://example.com"));
+  ASSERT_NO_THROW(ub.append_query_component("="));
+  ASSERT_EQ(network::string_view("%3D"), ub.uri().query_begin()->first);
+}
+
 TEST(builder_test, append_query_key_value_pair_encodes_equals_sign) {
   network::uri_builder ub(network::uri("http://example.com"));
   ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "="));
+  ASSERT_EQ(network::string_view("q"), ub.uri().query_begin()->first);
   ASSERT_EQ(network::string_view("%3D"), ub.uri().query_begin()->second);
 }
 
@@ -835,4 +837,19 @@ TEST(builder_test, append_query_key_value_pair_does_not_encode_qmark) {
   network::uri_builder ub(network::uri("http://example.com"));
   ASSERT_NO_THROW(ub.append_query_key_value_pair("q", "?"));
   ASSERT_EQ(network::string_view("?"), ub.uri().query_begin()->second);
+}
+
+TEST(builder_test, build_from_uri_with_encoded_user_info) {
+  network::uri_builder ub(network::uri("http://%40@example.com"));
+  ASSERT_EQ(network::string_view("%40"), ub.uri().user_info());
+}
+
+TEST(builder_test, build_from_uri_with_encoded_query) {
+  network::uri_builder ub(network::uri("http://example.com?x=%40"));
+  ASSERT_EQ(network::string_view("x=%40"), ub.uri().query());
+}
+
+TEST(builder_test, build_from_uri_with_encoded_fragment) {
+  network::uri_builder ub(network::uri("http://example.com#%40"));
+  ASSERT_EQ(network::string_view("%40"), ub.uri().fragment());
 }

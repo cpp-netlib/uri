@@ -275,9 +275,7 @@ uri::query_iterator::query_iterator(optional<detail::uri_part> query)
 
 uri::query_iterator::query_iterator(const query_iterator &other)
   : query_(other.query_)
-  , kvp_(other.kvp_) {
-
-}
+  , kvp_(other.kvp_) {}
 
 uri::query_iterator &uri::query_iterator::operator = (const query_iterator &other) {
   auto tmp(other);

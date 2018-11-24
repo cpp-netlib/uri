@@ -12,31 +12,31 @@
 namespace network {
 uri_builder::uri_builder(const network::uri &base_uri) {
   if (base_uri.has_scheme()) {
-    set_scheme(base_uri.scheme().to_string());
+    scheme_ = base_uri.scheme().to_string();
   }
 
   if (base_uri.has_user_info()) {
-    set_user_info(base_uri.user_info().to_string());
+    user_info_ = base_uri.user_info().to_string();
   }
 
   if (base_uri.has_host()) {
-    set_host(base_uri.host().to_string());
+    host_ = base_uri.host().to_string();
   }
 
   if (base_uri.has_port()) {
-    set_port(base_uri.port().to_string());
+    port_ = base_uri.port().to_string();
   }
 
   if (base_uri.has_path()) {
-    set_path(base_uri.path().to_string());
+    path_ = base_uri.path().to_string();
   }
 
   if (base_uri.has_query()) {
-    append_query(base_uri.query().to_string());
+    query_ = base_uri.query().to_string();
   }
 
   if (base_uri.has_fragment()) {
-    set_fragment(base_uri.fragment().to_string());
+    fragment_ = base_uri.fragment().to_string();
   }
 }
 
@@ -44,14 +44,14 @@ uri_builder::~uri_builder() noexcept {}
 
 network::uri uri_builder::uri() const { return network::uri(*this); }
 
-void uri_builder::set_scheme(string_type scheme) {
+void uri_builder::set_scheme(string_type &&scheme) {
   // validate scheme is valid and normalize
   scheme_ = scheme;
   detail::transform(*scheme_, std::begin(*scheme_),
                     [] (char ch) { return std::tolower(ch, std::locale()); });
 }
 
-void uri_builder::set_user_info(string_type user_info) {
+void uri_builder::set_user_info(string_type &&user_info) {
   user_info_ = string_type();
   network::uri::encode_user_info(std::begin(user_info), std::end(user_info),
                                  std::back_inserter(*user_info_));
@@ -62,7 +62,7 @@ uri_builder &uri_builder::clear_user_info() {
   return *this;
 }
 
-void uri_builder::set_host(string_type host) {
+void uri_builder::set_host(string_type &&host) {
   host_ = string_type();
   network::uri::encode_host(std::begin(host), std::end(host),
                             std::back_inserter(*host_));
@@ -70,7 +70,7 @@ void uri_builder::set_host(string_type host) {
                     [](char ch) { return std::tolower(ch, std::locale()); });
 }
 
-void uri_builder::set_port(string_type port) {
+void uri_builder::set_port(string_type &&port) {
   port_ = string_type();
   network::uri::encode_port(std::begin(port), std::end(port),
                             std::back_inserter(*port_));
@@ -81,7 +81,7 @@ uri_builder &uri_builder::clear_port() {
   return *this;
 }
 
-void uri_builder::set_authority(string_type authority) {
+void uri_builder::set_authority(string_type &&authority) {
   optional<detail::uri_part> user_info, host, port;
   uri::string_view view(authority);
   uri::const_iterator it = std::begin(view), last = std::end(view);
@@ -100,7 +100,7 @@ void uri_builder::set_authority(string_type authority) {
   }
 }
 
-void uri_builder::set_path(string_type path) {
+void uri_builder::set_path(string_type &&path) {
   path_ = string_type();
   network::uri::encode_path(std::begin(path), std::end(path),
                             std::back_inserter(*path_));
@@ -111,28 +111,27 @@ uri_builder &uri_builder::clear_path() {
   return *this;
 }
 
-void uri_builder::append_query(string_type query) {
+void uri_builder::append_query_component(string_type &&name) {
   if (!query_) {
     query_ = string_type();
   }
   else {
     query_->append("&");
   }
-  network::uri::encode_query(std::begin(query), std::end(query),
-                             std::back_inserter(*query_));
+  network::uri::encode_query_component(
+      std::begin(name), std::end(name), std::back_inserter(*query_));
 }
 
-void uri_builder::append_query_key_value_pair(string_type key, string_type value) {
+void uri_builder::append_query_key_value_pair(string_type &&key, string_type &&value) {
   if (!query_) {
     query_ = string_type();
   } else {
     query_->push_back('&');
   }
-  detail::encode_query_component(std::begin(key), std::end(key),
-                                 std::back_inserter(*query_));
-  query_->push_back('=');
-  detail::encode_query_component(std::begin(value), std::end(value),
-                                 std::back_inserter(*query_));
+  network::uri::encode_query_key_value_pair(
+      std::begin(key), std::end(key),
+      std::begin(value), std::end(value),
+      std::back_inserter(*query_));
 }
 
 uri_builder &uri_builder::clear_query() {
@@ -140,7 +139,7 @@ uri_builder &uri_builder::clear_query() {
   return *this;
 }
 
-void uri_builder::set_fragment(string_type fragment) {
+void uri_builder::set_fragment(string_type &&fragment) {
   fragment_ = string_type();
   network::uri::encode_fragment(std::begin(fragment), std::end(fragment),
                                 std::back_inserter(*fragment_));

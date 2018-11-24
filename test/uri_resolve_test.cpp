@@ -41,8 +41,8 @@ TEST_F(uri_resolve_test, base_has_empty_path__path_is_ref_path_1)
 
 TEST_F(uri_resolve_test, base_has_empty_path__path_is_ref_path_2)
 {
-  uri reference = uri_builder().path("g/x/y").append_query("q").fragment("s").uri();
-  ASSERT_EQ("http://a/g/x/y?q#s", resolved(uri("http://a/"), reference));
+  uri reference = uri_builder().path("g/x/y").append_query_key_value_pair("q", "1").fragment("s").uri();
+  ASSERT_EQ("http://a/g/x/y?q=1#s", resolved(uri("http://a/"), reference));
 }
 
 // normal examples
@@ -69,8 +69,8 @@ TEST_F(uri_resolve_test, path_starts_with_slash__path_is_ref_path) {
 }
 
 TEST_F(uri_resolve_test, path_starts_with_slash_with_query_fragment__path_is_ref_path) {
-  uri reference = uri_builder().path("/g/x").append_query("y").fragment("s").uri();
-  ASSERT_EQ("http://a/g/x?y#s", resolved(reference));
+  uri reference = uri_builder().path("/g/x").append_query_key_value_pair("y", "z").fragment("s").uri();
+  ASSERT_EQ("http://a/g/x?y=z#s", resolved(reference));
 }
 
 TEST_F(uri_resolve_test, DISABLED_has_authority__base_scheme_with_ref_authority) {
@@ -81,18 +81,18 @@ TEST_F(uri_resolve_test, DISABLED_has_authority__base_scheme_with_ref_authority)
 }
 
 TEST_F(uri_resolve_test, path_is_empty_but_has_query__returns_base_with_ref_query) {
-  uri reference = uri_builder().append_query("y").uri();
-  ASSERT_EQ("http://a/b/c/d;p?y", resolved(reference));
+  uri reference = uri_builder().append_query_key_value_pair("y", "z").uri();
+  ASSERT_EQ("http://a/b/c/d;p?y=z", resolved(reference));
 }
 
 TEST_F(uri_resolve_test, path_is_empty_but_has_query_base_no_query__returns_base_with_ref_query) {
-  uri reference = uri_builder().append_query("y").uri();
-  ASSERT_EQ("http://a/b/c/d?y", resolved(uri("http://a/b/c/d"), reference));
+  uri reference = uri_builder().append_query_key_value_pair("y", "z").uri();
+  ASSERT_EQ("http://a/b/c/d?y=z", resolved(uri("http://a/b/c/d"), reference));
 }
 
 TEST_F(uri_resolve_test, merge_path_with_query) {
-  uri reference = uri_builder().path("g").append_query("y").uri();
-  ASSERT_EQ("http://a/b/c/g?y", resolved(reference));
+  uri reference = uri_builder().path("g").append_query_key_value_pair("y", "z").uri();
+  ASSERT_EQ("http://a/b/c/g?y=z", resolved(reference));
 }
 
 TEST_F(uri_resolve_test, append_fragment) {
@@ -106,8 +106,8 @@ TEST_F(uri_resolve_test, merge_paths_with_fragment) {
 }
 
 TEST_F(uri_resolve_test, merge_paths_with_query_and_fragment) {
-  uri reference = uri_builder().path("g").append_query("y").fragment("s").uri();
-  ASSERT_EQ("http://a/b/c/g?y#s", resolved(reference));
+  uri reference = uri_builder().path("g").append_query_key_value_pair("y", "z").fragment("s").uri();
+  ASSERT_EQ("http://a/b/c/g?y=z#s", resolved(reference));
 }
 
 TEST_F(uri_resolve_test, merge_paths_with_semicolon_1) {
@@ -121,8 +121,8 @@ TEST_F(uri_resolve_test, merge_paths_with_semicolon_2) {
 }
 
 TEST_F(uri_resolve_test, merge_paths_with_semicolon_3) {
-  uri reference = uri_builder().path("g;x").append_query("y").fragment("s").uri();
-  ASSERT_EQ("http://a/b/c/g;x?y#s", resolved(reference));
+  uri reference = uri_builder().path("g;x").append_query_key_value_pair("y", "z").fragment("s").uri();
+  ASSERT_EQ("http://a/b/c/g;x?y=z#s", resolved(reference));
 }
 
 TEST_F(uri_resolve_test, path_is_empty__returns_base) {
@@ -245,12 +245,12 @@ TEST_F(uri_resolve_test, abnormal_example_14) {
 }
 
 TEST_F(uri_resolve_test, abnormal_example_15) {
-  uri reference = uri_builder().path("g").append_query("y/./x").uri();
+  uri reference = uri_builder().path("g").append_query_component("y/./x").uri();
   ASSERT_EQ("http://a/b/c/g?y/./x", resolved(reference));
 }
 
 TEST_F(uri_resolve_test, abnormal_example_16) {
-  uri reference = uri_builder().path("g").append_query("y/../x").uri();
+  uri reference = uri_builder().path("g").append_query_component("y/../x").uri();
   ASSERT_EQ("http://a/b/c/g?y/../x", resolved(reference));
 }
 

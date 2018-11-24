@@ -182,26 +182,36 @@ class uri_builder {
   uri_builder &clear_path();
 
   /**
+   * \deprecated Use append_query_component
+   * \warning This function's behaviour has changed and percent encoding
+   *          of the '=' character is not ignored.
    * \brief Adds a new query to the uri_builder.
    * \param query The query.
    * \returns \c *this
+   * \sa append_query_parameter
    */
   template <typename Source>
   uri_builder &append_query(const Source &query) {
-    append_query(detail::translate(query));
+    return append_query_component(query);
+  }
+
+  /**
+   * \brief Appends a new query component to the uri_builder. The
+   *        '=' symbol is percent encoded.
+   * \param component The query component.
+   * \returns \c *this
+   * \sa append_query_key_value_pair
+   */
+  template <typename Source>
+  uri_builder &append_query_component(const Source &component) {
+    append_query_component(detail::translate(component));
     return *this;
   }
 
   /**
-   * \brief Clears the URI query part.
-   * \returns \c *this
-   */
-  uri_builder &clear_query();
-
-  /**
    * \brief Adds a new query key/value pair to the uri_builder.
-   * \param key The query key.
-   * \param value The query value.
+   * \param key The query parameter key.
+   * \param value The query parameter value.
    * \returns \c *this
    */
   template <typename Key, typename Value>
@@ -210,6 +220,12 @@ class uri_builder {
                                 detail::translate(value));
     return *this;
   }
+
+  /**
+   * \brief Clears the URI query part.
+   * \returns \c *this
+   */
+  uri_builder &clear_query();
 
   /**
    * \brief Adds a new fragment to the uri_builder.
@@ -239,15 +255,15 @@ class uri_builder {
   network::uri uri() const;
 
  private:
-  void set_scheme(string_type scheme);
-  void set_user_info(string_type user_info);
-  void set_host(string_type host);
-  void set_port(string_type port);
-  void set_authority(string_type authority);
-  void set_path(string_type path);
-  void append_query(string_type query);
-  void append_query_key_value_pair(string_type key, string_type value);
-  void set_fragment(string_type fragment);
+  void set_scheme(string_type &&scheme);
+  void set_user_info(string_type &&user_info);
+  void set_host(string_type &&host);
+  void set_port(string_type &&port);
+  void set_authority(string_type &&authority);
+  void set_path(string_type &&path);
+  void append_query_component(string_type &&name);
+  void append_query_key_value_pair(string_type &&key, string_type &&value);
+  void set_fragment(string_type &&fragment);
 
   optional<string_type> scheme_, user_info_, host_, port_, path_, query_,
       fragment_;

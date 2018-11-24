@@ -106,17 +106,6 @@ OutputIterator encode_path(InputIterator first, InputIterator last,
 }
 
 template <typename InputIterator, typename OutputIterator>
-OutputIterator encode_query(InputIterator first, InputIterator last,
-                            OutputIterator out) {
-  auto it = first;
-  while (it != last) {
-    detail::encode_char(*it, out, "/.@&%;=");
-    ++it;
-  }
-  return out;
-}
-
-template <typename InputIterator, typename OutputIterator>
 OutputIterator encode_query_component(InputIterator first, InputIterator last,
                                       OutputIterator out) {
   auto it = first;
@@ -164,13 +153,6 @@ template <class String>
 String encode_path(const String &path) {
   String encoded;
   encode_path(std::begin(path), std::end(path), std::back_inserter(encoded));
-  return encoded;
-}
-
-template <class String>
-String encode_query(const String &query) {
-  String encoded;
-  encode_query(std::begin(query), std::end(query), std::back_inserter(encoded));
   return encoded;
 }
 

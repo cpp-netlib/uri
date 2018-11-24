@@ -547,8 +547,8 @@ class uri {
   }
 
   /**
-   * \brief Encodes a sequence according to the rules for encoding a
-   *        query part.
+   * \deprecated Avoid using this function
+   * \brief Equivalent to \c encode_query_component
    * \param first The iterator at first element in the input
    *        sequence.
    * \param last The iterator at end + 1th element in the input
@@ -556,11 +556,51 @@ class uri {
    * \param out The iterator at the first element in the output
    *        sequence.
    * \returns The iterator at the end + 1th in the output sequence.
+   * \sa encode_query_commponent
+   * \sa encode_query_key_value_pair
    */
   template <typename InputIter, typename OutputIter>
   static OutputIter encode_query(InputIter first, InputIter last,
                                  OutputIter out) {
-    return detail::encode_query(first, last, out);
+    return encode_query_component(first, last, out);
+  }
+
+  /**
+   * \brief Encodes a sequence according to the rules for encoding a
+   *        query component, including the '=' character.
+   * \param first The iterator at first element in the input
+   *              sequence.
+   * \param last The iterator at end + 1th element in the input
+   *             sequence.
+   * \param out The iterator at the first element in the output
+   *            sequence.
+   * \returns The iterator at the end + 1th in the output sequence.
+   */
+  template <typename InputIter, typename OutputIter>
+  static OutputIter encode_query_component(
+      InputIter first, InputIter last, OutputIter out) {
+    return detail::encode_query_component(first, last, out);
+  }
+
+  /**
+   * \brief Encodes a sequence according to the rules for encoding a
+   *        query key value pair.
+   * \param key_first The iterator at first element in the input
+   *                   sequence.
+   * \param key_last The iterator at end + 1th element in the input
+   *                  sequence.
+   * \param out The iterator at the first element in the output
+   *            sequence.
+   * \returns The iterator at the end + 1th in the output sequence.
+   */
+  template <typename InputIter, typename OutputIter>
+  static OutputIter encode_query_key_value_pair(
+      InputIter key_first, InputIter key_last,
+      InputIter value_first, InputIter value_last,
+      OutputIter out) {
+    out = detail::encode_query_component(key_first, key_last, out);
+    out++ = '=';
+    return detail::encode_query_component(value_first, value_last, out);
   }
 
   /**
