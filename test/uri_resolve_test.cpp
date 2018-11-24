@@ -245,12 +245,12 @@ TEST_F(uri_resolve_test, abnormal_example_14) {
 }
 
 TEST_F(uri_resolve_test, abnormal_example_15) {
-  uri reference = uri_builder().path("g").append_query_parameter("y/./x").uri();
+  uri reference = uri_builder().path("g").append_query_component("y/./x").uri();
   ASSERT_EQ("http://a/b/c/g?y/./x", resolved(reference));
 }
 
 TEST_F(uri_resolve_test, abnormal_example_16) {
-  uri reference = uri_builder().path("g").append_query_parameter("y/../x").uri();
+  uri reference = uri_builder().path("g").append_query_component("y/../x").uri();
   ASSERT_EQ("http://a/b/c/g?y/../x", resolved(reference));
 }
 

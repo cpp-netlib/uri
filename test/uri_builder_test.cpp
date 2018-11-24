@@ -790,13 +790,13 @@ TEST(builder_test, construct_from_uri_bug_116) {
 
 TEST(builder_test, append_query_value) {
   network::uri_builder ub(network::uri("http://example.com"));
-  ASSERT_NO_THROW(ub.append_query_parameter("q"));
+  ASSERT_NO_THROW(ub.append_query_component("q"));
   ASSERT_EQ(network::string_view("q"), ub.uri().query_begin()->first);
 }
 
 TEST(builder_test, append_query_value_encodes_equal_sign) {
   network::uri_builder ub(network::uri("http://example.com"));
-  ASSERT_NO_THROW(ub.append_query_parameter("="));
+  ASSERT_NO_THROW(ub.append_query_component("="));
   ASSERT_EQ(network::string_view("%3D"), ub.uri().query_begin()->first);
 }
 
