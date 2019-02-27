@@ -12,6 +12,7 @@ option(Uri_BUILD_DOCS "Build the URI documentation." ON)
 option(Uri_FULL_WARNINGS "Build the library with all warnings turned on." ON)
 option(Uri_WARNINGS_AS_ERRORS "Treat warnings as errors." ON)
 option(Uri_USE_STATIC_CRT "Use static C Runtime library (/MT or MTd)." ON)
+option(Uri_DISABLE_LIBCXX "Disable libc++ (only applies if compiler is clang)" OFF)
 
 find_package(Threads REQUIRED)
 
