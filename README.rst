@@ -2,6 +2,16 @@
 .. :Date: Jan 01, 2013
 .. :Description: Source code for the cpp-netlib URI class.
 
+###################
+Deprecation warning
+###################
+
+This library is still missing some features (including full Unicode
+support), and does not work on some of the newest compiler versions.
+Therefore, please prefer to use the
+[WhatWG URL implementation](https://github.com/cpp-netlib/url) that
+is intended to supersede this library.
+
 ################
  C++ Network URI
 ################
