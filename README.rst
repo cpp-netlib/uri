@@ -9,8 +9,10 @@ Deprecation warning
 This library is still missing some features (including full Unicode
 support), and does not work on some of the newest compiler versions.
 Therefore, please prefer to use the
-[WhatWG URL implementation](https://github.com/cpp-netlib/url) that
+`WhatWG URL implementation`_ that
 is intended to supersede this library.
+
+.. _`WhatWG URL implementation`: https://github.com/cpp-netlib/url
 
 ################
  C++ Network URI
