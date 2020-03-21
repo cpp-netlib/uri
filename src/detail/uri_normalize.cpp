@@ -3,32 +3,23 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#include "uri_normalize.hpp"
+#include "uri_percent_encode.hpp"
+#include "algorithm.hpp"
+#include "algorithm_split.hpp"
 #include <iterator>
 #include <vector>
 #include <algorithm>
 
-#ifdef NETWORK_URI_EXTERNAL_BOOST
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/join.hpp>
-namespace network_boost = boost;
-#else  // NETWORK_URI_EXTERNAL_BOOST
-#include "../boost/algorithm/string/split.hpp"
-#include "../boost/algorithm/string/join.hpp"
-#endif  // NETWORK_URI_EXTERNAL_BOOST
+using namespace network::algorithm;
+namespace network_detail = network::detail;
 
-#include "uri_normalize.hpp"
-#include "uri_percent_encode.hpp"
-#include "algorithm.hpp"
-
-namespace network {
-namespace detail {
-std::string normalize_path_segments(string_view path) {
+std::string network_detail::normalize_path_segments(string_view path) {
   std::string result;
 
   if (!path.empty()) {
     std::vector<std::string> path_segments;
-    network_boost::split(path_segments, path,
-                         [](char ch) { return ch == '/'; });
+    split(path_segments, path, '/');
 
     bool last_segment_is_slash = path_segments.back().empty();
     std::vector<std::string> normalized_segments;
@@ -61,12 +52,13 @@ std::string normalize_path_segments(string_view path) {
   return result;
 }
 
-std::string normalize_path(string_view path, uri_comparison_level level) {
+std::string network_detail::normalize_path(string_view path,
+                                   uri_comparison_level level) {
   auto result = path.to_string();
 
   if (uri_comparison_level::syntax_based == level) {
     // case normalization
-    detail::for_each(result, percent_encoded_to_upper<std::string>());
+    for_each(result, percent_encoded_to_upper<std::string>());
 
     // % encoding normalization
     result.erase(detail::decode_encoded_unreserved_chars(std::begin(result),
@@ -79,5 +71,3 @@ std::string normalize_path(string_view path, uri_comparison_level level) {
 
   return result;
 }
-}  // namespace detail
-}  // namespace network
