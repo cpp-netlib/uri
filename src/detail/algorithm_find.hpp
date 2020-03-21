@@ -54,13 +54,13 @@ bool all(IteratorBegT iteratorBeg, IteratorEndT iteratorEnd,
 }
 
 template <typename ContainerT, typename RangeT>
-typename ContainerT::const_iterator find_nth(ContainerT const &str,
+typename ContainerT::iterator find_nth(ContainerT &str,
                                              RangeT symbol, std::size_t pos) {
   return algorithm::find_nth(str.begin(), str.end(), symbol, pos);
 }
 
 template <typename ContainerT, typename RangeT>
-typename ContainerT::const_iterator find_last(ContainerT const &str,
+typename ContainerT::iterator find_last(ContainerT &str,
                                               RangeT symbol) {
   auto iter = algorithm::find_nth(str.rbegin(), str.rend(), symbol, 0);
   if (iter == str.rend()) {
