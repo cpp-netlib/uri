@@ -149,7 +149,7 @@ void uri::initialize(optional<string_type> scheme,
   }
 
   if (path) {
-    uri_parts_.hier_part.path =  detail::copy_part(*path, it);
+    uri_parts_.hier_part.path = detail::copy_part(*path, it);
   }
 
   if (query) {
@@ -174,9 +174,10 @@ uri::uri(const uri_builder &builder) {
              builder.path_, builder.query_, builder.fragment_);
 }
 
-uri::uri(uri &&other) noexcept : uri_(std::move(other.uri_)),
-                                 uri_view_(uri_),
-                                 uri_parts_(std::move(other.uri_parts_)) {
+uri::uri(uri &&other) noexcept
+    : uri_(std::move(other.uri_)),
+      uri_view_(uri_),
+      uri_parts_(std::move(other.uri_parts_)) {
   detail::advance_parts(uri_view_, uri_parts_, other.uri_parts_);
   other.uri_.clear();
   other.uri_view_ = string_view(other.uri_);
@@ -220,9 +221,8 @@ bool uri::has_user_info() const noexcept {
 }
 
 uri::string_view uri::user_info() const noexcept {
-  return has_user_info()
-             ? to_string_view(uri_, *uri_parts_.hier_part.user_info)
-             : string_view{};
+  return has_user_info() ? to_string_view(uri_, *uri_parts_.hier_part.user_info)
+                         : string_view{};
 }
 
 bool uri::has_host() const noexcept {
@@ -263,50 +263,48 @@ uri::string_view uri::query() const noexcept {
 uri::query_iterator::query_iterator() : query_{}, kvp_{} {}
 
 uri::query_iterator::query_iterator(optional<detail::uri_part> query)
-  : query_(query)
-  , kvp_{} {
+    : query_(query), kvp_{} {
   if (query_ && query_->empty()) {
     query_ = nullopt;
-  }
-  else {
+  } else {
     assign_kvp();
   }
 }
 
 uri::query_iterator::query_iterator(const query_iterator &other)
-  : query_(other.query_)
-  , kvp_(other.kvp_) {}
+    : query_(other.query_), kvp_(other.kvp_) {}
 
-uri::query_iterator &uri::query_iterator::operator = (const query_iterator &other) {
+uri::query_iterator &uri::query_iterator::operator=(
+    const query_iterator &other) {
   auto tmp(other);
   swap(tmp);
   return *this;
 }
 
-uri::query_iterator::reference uri::query_iterator::operator ++ () noexcept {
+uri::query_iterator::reference uri::query_iterator::operator++() noexcept {
   increment();
   return kvp_;
 }
 
-uri::query_iterator::value_type uri::query_iterator::operator ++ (int) noexcept {
+uri::query_iterator::value_type uri::query_iterator::operator++(int) noexcept {
   auto original = kvp_;
   increment();
   return original;
 }
 
-uri::query_iterator::reference uri::query_iterator::operator * () const noexcept {
+uri::query_iterator::reference uri::query_iterator::operator*() const noexcept {
   return kvp_;
 }
 
-uri::query_iterator::pointer uri::query_iterator::operator -> () const noexcept {
+uri::query_iterator::pointer uri::query_iterator::operator->() const noexcept {
   return std::addressof(kvp_);
 }
 
-bool uri::query_iterator::operator==(const query_iterator &other) const noexcept {
+bool uri::query_iterator::operator==(const query_iterator &other) const
+    noexcept {
   if (!query_ && !other.query_) {
     return true;
-  }
-  else if (query_ && other.query_) {
+  } else if (query_ && other.query_) {
     // since we're comparing substrings, the address of the first
     // element in each iterator must be the same
     return std::addressof(kvp_.first) == std::addressof(other.kvp_.first);
@@ -326,7 +324,7 @@ void uri::query_iterator::advance_to_next_kvp() noexcept {
       first, last, [](char c) -> bool { return c == '&' || c == ';'; });
 
   if (sep_it != last) {
-    ++sep_it; // skip next separator
+    ++sep_it;  // skip next separator
   }
 
   // reassign query to the next element
@@ -343,9 +341,10 @@ void uri::query_iterator::assign_kvp() noexcept {
 
   kvp_.first = string_view(std::addressof(*first), std::distance(first, eq_it));
   if (eq_it != sep_it) {
-    ++eq_it; // skip '=' symbol
+    ++eq_it;  // skip '=' symbol
   }
-  kvp_.second = string_view(std::addressof(*eq_it), std::distance(eq_it, sep_it));
+  kvp_.second =
+      string_view(std::addressof(*eq_it), std::distance(eq_it, sep_it));
 }
 
 void uri::query_iterator::increment() noexcept {
@@ -362,7 +361,8 @@ void uri::query_iterator::increment() noexcept {
 }
 
 uri::query_iterator uri::query_begin() const noexcept {
-  return has_query()? uri::query_iterator{uri_parts_.query} : uri::query_iterator{};
+  return has_query() ? uri::query_iterator{uri_parts_.query}
+                     : uri::query_iterator{};
 }
 
 uri::query_iterator uri::query_end() const noexcept {
@@ -378,9 +378,7 @@ uri::string_view uri::fragment() const noexcept {
                         : string_view{};
 }
 
-bool uri::has_authority() const noexcept {
-  return has_host();
-}
+bool uri::has_authority() const noexcept { return has_host(); }
 
 uri::string_view uri::authority() const noexcept {
   if (!has_host()) {
@@ -402,26 +400,22 @@ uri::string_view uri::authority() const noexcept {
   auto first = std::begin(host), last = std::end(host);
   if (has_user_info() && !user_info.empty()) {
     first = std::begin(user_info);
-  }
-  else if (host.empty() && has_port() && !port.empty()) {
+  } else if (host.empty() && has_port() && !port.empty()) {
     first = std::begin(port);
-    --first; // include ':' before port
+    --first;  // include ':' before port
   }
 
   if (host.empty()) {
     if (has_port() && !port.empty()) {
       last = std::end(port);
-    }
-    else if (has_user_info() && !user_info.empty()) {
+    } else if (has_user_info() && !user_info.empty()) {
       last = std::end(user_info);
-      ++last; // include '@'
+      ++last;  // include '@'
     }
-  }
-  else if (has_port()) {
+  } else if (has_port()) {
     if (port.empty()) {
-      ++last; // include ':' after host
-    }
-    else {
+      ++last;  // include ':' after host
+    } else {
       last = std::end(port);
     }
   }
@@ -443,9 +437,7 @@ std::u32string uri::u32string() const {
   return std::u32string(std::begin(*this), std::end(*this));
 }
 
-uri::string_view uri::view() const noexcept {
-  return uri_view_;
-}
+uri::string_view uri::view() const noexcept { return uri_view_; }
 
 bool uri::empty() const noexcept { return uri_.empty(); }
 
@@ -473,13 +465,15 @@ uri uri::normalize(uri_comparison_level level) const {
 
     // if (parts.hier_part.host) {
     //   std::string::iterator first, last;
-    //   std::tie(first, last) = mutable_part(normalized, *parts.hier_part.host);
-    //   std::transform(first, last, first,
-    //                  [](char ch) { return std::tolower(ch, std::locale()); });
+    //   std::tie(first, last) = mutable_part(normalized,
+    //   *parts.hier_part.host); std::transform(first, last, first,
+    //                  [](char ch) { return std::tolower(ch, std::locale());
+    //                  });
     // }
 
     // ...except when used in percent encoding
-    detail::for_each(normalized, detail::percent_encoded_to_upper<std::string>());
+    detail::for_each(normalized,
+                     detail::percent_encoded_to_upper<std::string>());
 
     // parts are invalidated here
     // there's got to be a better way of doing this that doesn't
@@ -490,7 +484,8 @@ uri uri::normalize(uri_comparison_level level) const {
     normalized_view = string_view(normalized);
 
     // need to parse the parts again as the underlying string has changed
-    const_iterator it = std::begin(normalized_view), last = std::end(normalized_view);
+    const_iterator it = std::begin(normalized_view),
+                   last = std::end(normalized_view);
     bool is_valid = detail::parse(it, last, parts);
     ignore(is_valid);
     assert(is_valid);
@@ -550,9 +545,9 @@ uri uri::make_relative(const uri &other) const {
   }
 
   auto path =
-    detail::normalize_path(this->path(), uri_comparison_level::syntax_based);
-  auto other_path = detail::normalize_path(other.path(),
-                                           uri_comparison_level::syntax_based);
+      detail::normalize_path(this->path(), uri_comparison_level::syntax_based);
+  auto other_path =
+      detail::normalize_path(other.path(), uri_comparison_level::syntax_based);
 
   optional<string_type> query, fragment;
   if (other.has_query()) {
