@@ -9,9 +9,10 @@
 #include "algorithm_split.hpp"
 #include <iterator>
 #include <vector>
-#include <algorithm>
 
 using namespace network::algorithm;
+using network::string_view;
+using network::uri_comparison_level;
 namespace network_detail = network::detail;
 
 std::string network_detail::normalize_path_segments(string_view path) {

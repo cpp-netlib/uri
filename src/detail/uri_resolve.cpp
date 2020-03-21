@@ -8,6 +8,8 @@
 #include "algorithm_find.hpp"
 
 using namespace network::algorithm;
+using network::uri;
+using network::string_view;
 namespace network_detail = network::detail;
 
 namespace {
