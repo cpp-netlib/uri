@@ -18,6 +18,8 @@ find_package(Threads REQUIRED)
 
 set(CMAKE_VERBOSE_MAKEFILE true)
 
+message(STATUS "Configure compiler")
+message("Using ${CMAKE_CXX_COMPILER_ID}")
 if (${CMAKE_CXX_COMPILER_ID} MATCHES GNU)
   INCLUDE(CheckCXXCompilerFlag)
   CHECK_CXX_COMPILER_FLAG(-std=c++11 HAVE_STD11)
