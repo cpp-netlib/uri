@@ -38,6 +38,7 @@ void percent_encode(charT in, OutputIterator &out) {
 
 template <class charT>
 bool is_unreserved(charT in) {
+  // clang-format off
   return ((in >= 'a') && (in <= 'z')) ||
          ((in >= 'A') && (in <= 'Z')) ||
          ((in >= '0') && (in <= '9')) ||
@@ -45,6 +46,7 @@ bool is_unreserved(charT in) {
          (in == '.') ||
          (in == '_') ||
          (in == '~');
+  // clang-format on
 }
 
 template <class charT, class OutputIterator>

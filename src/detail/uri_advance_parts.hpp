@@ -10,8 +10,7 @@
 
 namespace network {
 namespace detail {
-uri_part copy_part(const std::string &part,
-                   string_view::const_iterator &it);
+uri_part copy_part(const std::string &part, string_view::const_iterator &it);
 
 void advance_parts(string_view uri_view, uri_parts &parts,
                    const uri_parts &existing_parts);

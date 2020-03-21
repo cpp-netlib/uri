@@ -12,12 +12,7 @@
 namespace network {
 namespace detail {
 namespace {
-enum class uri_state {
-  scheme,
-  hier_part,
-  query,
-  fragment
-};
+enum class uri_state { scheme, hier_part, query, fragment };
 
 enum class hier_part_state {
   first_slash,
@@ -44,8 +39,7 @@ bool validate_scheme(string_view::const_iterator &it,
   while (it != last) {
     if (*it == ':') {
       break;
-    }
-    else if (!isalnum(it, last) && !is_in(it, last, "+-.")) {
+    } else if (!isalnum(it, last) && !is_in(it, last, "+-.")) {
       return false;
     }
   }
@@ -56,10 +50,8 @@ bool validate_scheme(string_view::const_iterator &it,
 bool validate_user_info(string_view::const_iterator it,
                         string_view::const_iterator last) {
   while (it != last) {
-    if (!is_unreserved(it, last) &&
-        !is_pct_encoded(it, last) &&
-        !is_sub_delim(it, last) &&
-        !is_in(it, last, ":")) {
+    if (!is_unreserved(it, last) && !is_pct_encoded(it, last) &&
+        !is_sub_delim(it, last) && !is_in(it, last, ":")) {
       return false;
     }
   }
@@ -72,8 +64,7 @@ bool set_host_and_port(string_view::const_iterator first,
                        uri_parts &parts) {
   if (first >= last_colon) {
     parts.hier_part.host = uri_part(first, last);
-  }
-  else {
+  } else {
     auto port_start = last_colon;
     ++port_start;
     parts.hier_part.host = uri_part(first, last_colon);
@@ -94,7 +85,7 @@ bool validate_fragment(string_view::const_iterator &it,
   }
   return true;
 }
-} // namespace
+}  // namespace
 
 bool parse(string_view::const_iterator &it, string_view::const_iterator last,
            uri_parts &parts) {
@@ -111,8 +102,7 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
     // move past the scheme delimiter
     ++it;
     state = uri_state::hier_part;
-  }
-  else {
+  } else {
     return false;
   }
 
@@ -128,25 +118,21 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         first = it;
         ++it;
         continue;
-      }
-      else {
+      } else {
         hp_state = hier_part_state::path;
         first = it;
       }
-    }
-    else if (hp_state == hier_part_state::second_slash) {
+    } else if (hp_state == hier_part_state::second_slash) {
       if (*it == '/') {
         hp_state = hier_part_state::authority;
         ++it;
         first = it;
         continue;
-      }
-      else {
+      } else {
         // it's a valid URI, and this is the beginning of the path
         hp_state = hier_part_state::path;
       }
-    }
-    else if (hp_state == hier_part_state::authority) {
+    } else if (hp_state == hier_part_state::authority) {
       if (is_in(first, last, "@:")) {
         return false;
       }
@@ -171,17 +157,14 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         }
 
         continue;
-      }
-      else if (*it == '[') {
+      } else if (*it == '[') {
         // this is an IPv6 address
         hp_state = hier_part_state::host_ipv6;
         first = it;
         continue;
-      }
-      else if (*it == ':') {
+      } else if (*it == ':') {
         last_colon = it;
-      }
-      else if (*it == '/') {
+      } else if (*it == '/') {
         // we skipped right past the host and port, and are at the path.
         if (!set_host_and_port(first, it, last_colon, parts)) {
           return false;
@@ -189,8 +172,7 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         hp_state = hier_part_state::path;
         first = it;
         continue;
-      }
-      else if (*it == '?') {
+      } else if (*it == '?') {
         // the path is empty, but valid, and the next part is the query
         if (!set_host_and_port(first, it, last_colon, parts)) {
           return false;
@@ -200,8 +182,7 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         ++it;
         first = it;
         break;
-      }
-      else if (*it == '#') {
+      } else if (*it == '#') {
         // the path is empty, but valid, and the next part is the fragment
         if (!set_host_and_port(first, it, last_colon, parts)) {
           return false;
@@ -212,8 +193,7 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         first = it;
         break;
       }
-    }
-    else if (hp_state == hier_part_state::host) {
+    } else if (hp_state == hier_part_state::host) {
       if (*first == ':') {
         return false;
       }
@@ -224,14 +204,12 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         ++it;
         first = it;
         continue;
-      }
-      else if (*it == '/') {
+      } else if (*it == '/') {
         parts.hier_part.host = uri_part(first, it);
         hp_state = hier_part_state::path;
         first = it;
         continue;
-      }
-      else if (*it == '?') {
+      } else if (*it == '?') {
         // the path is empty, but valid, and the next part is the query
         parts.hier_part.host = uri_part(first, it);
         parts.hier_part.path = uri_part(it, it);
@@ -239,8 +217,7 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         ++it;
         first = it;
         break;
-      }
-      else if (*it == '#') {
+      } else if (*it == '#') {
         // the path is empty, but valid, and the next part is the fragment
         parts.hier_part.host = uri_part(first, it);
         parts.hier_part.path = uri_part(it, it);
@@ -249,8 +226,7 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         first = it;
         break;
       }
-    }
-    else if (hp_state == hier_part_state::host_ipv6) {
+    } else if (hp_state == hier_part_state::host_ipv6) {
       if (*first != '[') {
         return false;
       }
@@ -260,27 +236,23 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         // Then test if the next part is a host, part, or the end of the file
         if (it == last) {
           break;
-        }
-        else if (*it == ':') {
+        } else if (*it == ':') {
           parts.hier_part.host = uri_part(first, it);
           hp_state = hier_part_state::port;
           ++it;
           first = it;
-        }
-        else if (*it == '/') {
+        } else if (*it == '/') {
           parts.hier_part.host = uri_part(first, it);
           hp_state = hier_part_state::path;
           first = it;
-        }
-        else if (*it == '?') {
+        } else if (*it == '?') {
           parts.hier_part.host = uri_part(first, it);
           parts.hier_part.path = uri_part(it, it);
           state = uri_state::query;
           ++it;
           first = it;
           break;
-        }
-        else if (*it == '#') {
+        } else if (*it == '#') {
           parts.hier_part.host = uri_part(first, it);
           parts.hier_part.path = uri_part(it, it);
           state = uri_state::fragment;
@@ -290,8 +262,7 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         }
         continue;
       }
-    }
-    else if (hp_state == hier_part_state::port) {
+    } else if (hp_state == hier_part_state::port) {
       if (*first == '/') {
         // the port is empty, but valid
         if (!is_valid_port(first)) {
@@ -312,13 +283,11 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         hp_state = hier_part_state::path;
         first = it;
         continue;
-      }
-      else if (!isdigit(it, last)) {
+      } else if (!isdigit(it, last)) {
         return false;
       }
       continue;
-    }
-    else if (hp_state == hier_part_state::path) {
+    } else if (hp_state == hier_part_state::path) {
       if (*it == '?') {
         parts.hier_part.path = uri_part(first, it);
         // move past the query delimiter
@@ -326,8 +295,7 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         first = it;
         state = uri_state::query;
         break;
-      }
-      else if (*it == '#') {
+      } else if (*it == '#') {
         parts.hier_part.path = uri_part(first, it);
         // move past the fragment delimiter
         ++it;
@@ -338,8 +306,7 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
 
       if (!is_pchar(it, last) && !is_in(it, last, "/")) {
         return false;
-      }
-      else {
+      } else {
         continue;
       }
     }
@@ -358,8 +325,7 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
           first = it;
           state = uri_state::fragment;
           break;
-        }
-        else {
+        } else {
           return false;
         }
       }
@@ -383,8 +349,7 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         return false;
       }
       parts.hier_part.path = uri_part(last, last);
-    }
-    else if (hp_state == hier_part_state::host) {
+    } else if (hp_state == hier_part_state::host) {
       if (first == last) {
         return false;
       }
@@ -393,28 +358,23 @@ bool parse(string_view::const_iterator &it, string_view::const_iterator last,
         return false;
       }
       parts.hier_part.path = uri_part(last, last);
-    }
-    else if (hp_state == hier_part_state::host_ipv6) {
+    } else if (hp_state == hier_part_state::host_ipv6) {
       if (!set_host_and_port(first, last, last_colon, parts)) {
         return false;
       }
       parts.hier_part.path = uri_part(last, last);
-    }
-    else if (hp_state == hier_part_state::port) {
+    } else if (hp_state == hier_part_state::port) {
       if (!is_valid_port(first)) {
         return false;
       }
       parts.hier_part.port = uri_part(first, last);
       parts.hier_part.path = uri_part(last, last);
-    }
-    else if (hp_state == hier_part_state::path) {
+    } else if (hp_state == hier_part_state::path) {
       parts.hier_part.path = uri_part(first, last);
     }
-  }
-  else if (state == uri_state::query) {
+  } else if (state == uri_state::query) {
     parts.query = uri_part(first, last);
-  }
-  else if (state == uri_state::fragment) {
+  } else if (state == uri_state::fragment) {
     parts.fragment = uri_part(first, last);
   }
 

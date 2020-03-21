@@ -7,7 +7,8 @@
 
 /**
  * \file
- * \brief Contains macros to configure compiler or platform-specific workarounds.
+ * \brief Contains macros to configure compiler or platform-specific
+ * workarounds.
  */
 
 #ifndef NETWORK_URI_CONFIG_INC
@@ -17,4 +18,4 @@
 #define NETWORK_URI_MSVC _MSC_VER
 #endif  // _MSC_VER
 
-#endif // NETWORK_URI_CONFIG_INC
+#endif  // NETWORK_URI_CONFIG_INC

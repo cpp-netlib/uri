@@ -27,11 +27,11 @@ class basic_string_view {
  public:
   typedef traits traits_type;
   typedef charT value_type;
-  typedef charT* pointer;
-  typedef const charT* const_pointer;
-  typedef charT& reference;
-  typedef const charT& const_reference;
-  typedef const charT* const_iterator;
+  typedef charT *pointer;
+  typedef const charT *const_pointer;
+  typedef charT &reference;
+  typedef const charT &const_reference;
+  typedef const charT *const_iterator;
   typedef const_iterator iterator;
   typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
   typedef const_reverse_iterator reverse_iterator;
@@ -47,32 +47,31 @@ class basic_string_view {
   /**
    * \brief Copy constructor.
    */
-  constexpr basic_string_view(const basic_string_view&) noexcept = default;
+  constexpr basic_string_view(const basic_string_view &) noexcept = default;
 
   /**
    * \brief Assignment operator.
    */
-  basic_string_view& operator=(const basic_string_view&) noexcept = default;
+  basic_string_view &operator=(const basic_string_view &) noexcept = default;
 
   /**
    * \brief Constructor.
    */
   template <class Allocator>
   basic_string_view(
-      const std::basic_string<charT, traits, Allocator>& str) noexcept
-      : data_(str.data()),
-        size_(str.size()) {}
+      const std::basic_string<charT, traits, Allocator> &str) noexcept
+      : data_(str.data()), size_(str.size()) {}
 
   /**
    * \brief Constructor.
    */
-  constexpr basic_string_view(const charT* str)
+  constexpr basic_string_view(const charT *str)
       : data_(str), size_(traits::length(str)) {}
 
   /**
    * \brief Constructor.
    */
-  constexpr basic_string_view(const charT* str, size_type len)
+  constexpr basic_string_view(const charT *str, size_type len)
       : data_(str), size_(len) {}
 
   constexpr const_iterator begin() const noexcept { return data_; }
@@ -133,7 +132,7 @@ class basic_string_view {
 
   void remove_suffix(size_type n) { size_ -= n; }
 
-  void swap(basic_string_view& s) noexcept {
+  void swap(basic_string_view &s) noexcept {
     std::swap(data_, s.data_);
     std::swap(size_, s.size_);
   }
@@ -145,11 +144,11 @@ class basic_string_view {
 
   template <class Allocator = std::allocator<charT>>
   std::basic_string<charT, traits, Allocator> to_string(
-      const Allocator& a = Allocator()) const {
+      const Allocator &a = Allocator()) const {
     return std::basic_string<charT, traits, Allocator>(begin(), end(), a);
   }
 
-  size_type copy(charT* s, size_type n, size_type pos = 0) const {
+  size_type copy(charT *s, size_type n, size_type pos = 0) const {
     size_type rlen = std::min(n, size() - pos);
     std::copy_n(begin() + pos, rlen, s);
     return rlen;
@@ -179,15 +178,15 @@ class basic_string_view {
     return substr(pos1, n1).compare(s.substr(pos2, n2));
   }
 
-  constexpr int compare(const charT* s) const {
+  constexpr int compare(const charT *s) const {
     return compare(basic_string_view(s));
   }
 
-  constexpr int compare(size_type pos1, size_type n1, const charT* s) const {
+  constexpr int compare(size_type pos1, size_type n1, const charT *s) const {
     return substr(pos1, n1).compare(basic_string_view(s));
   }
 
-  constexpr int compare(size_type pos1, size_type n1, const charT* s,
+  constexpr int compare(size_type pos1, size_type n1, const charT *s,
                         size_type n2) const {
     return substr(pos1, n1).compare(basic_string_view(s, n2));
   }
@@ -261,8 +260,8 @@ constexpr bool operator>=(basic_string_view<charT, traits> lhs,
  * \brief Output stream operator.
  */
 template <class charT, class traits>
-std::basic_ostream<charT, traits>& operator<<(
-    std::basic_ostream<charT, traits>& os,
+std::basic_ostream<charT, traits> &operator<<(
+    std::basic_ostream<charT, traits> &os,
     basic_string_view<charT, traits> str) {
   return os << str.to_string();
 }

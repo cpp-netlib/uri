@@ -35,4 +35,4 @@
 #include <network/uri/uri.hpp>
 #include <network/uri/uri_io.hpp>
 
-#endif // NETWORK_URI_HPP
+#endif  // NETWORK_URI_HPP
