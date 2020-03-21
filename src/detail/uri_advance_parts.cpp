@@ -9,8 +9,8 @@
 #include <limits>
 
 namespace network_detail = network::detail;
-using network::detail::uri_part;
 using network::string_view;
+using network::detail::uri_part;
 
 namespace {
 template <class Iterator>

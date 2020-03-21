@@ -43,17 +43,16 @@ struct percent_encoded_to_upper {
 
 template <class Iter>
 Iter decode_encoded_unreserved_chars(Iter first, Iter last) {
-
   // unreserved  = ALPHA / DIGIT / "-" / "." / "_" / "~"
-
-  const auto is_unreserved = [](char c)
-    {
+  // clang-format off
+  const auto is_unreserved = [](char c) {
       return std::isalnum(c, std::locale())
       || '-' == c
       || '.' == c
       || '_' == c
       || '~' == c;
-    };
+  };
+  // clang-format on
 
   auto it = first, it2 = first;
   while (it != last) {
@@ -62,15 +61,16 @@ Iter decode_encoded_unreserved_chars(Iter first, Iter last) {
       const auto opt_char = percent_encode(sfirst);
       if (opt_char && is_unreserved(*opt_char)) {
         *it2 = *opt_char;
-        ++it; ++it;
+        ++it;
+        ++it;
       } else {
         *it2 = *it;
       }
-    }
-    else {
+    } else {
       *it2 = *it;
     }
-    ++it; ++it2;
+    ++it;
+    ++it2;
   }
   return it2;
 }
