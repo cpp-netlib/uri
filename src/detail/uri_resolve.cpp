@@ -57,7 +57,7 @@ static std::string remove_dot_segments(std::string input) {
       int n = (input.front() == '/') ? 1 : 0;
       std::string::const_iterator slash = find_nth(input, '/', n);
       result.append(input.cbegin(), slash);
-      input.erase(std::begin(input), slash);
+      input.erase(input.cbegin(), slash);
     }
   }
   return result;
