@@ -54,7 +54,7 @@ std::string network_detail::normalize_path_segments(string_view path) {
 }
 
 std::string network_detail::normalize_path(string_view path,
-                                   uri_comparison_level level) {
+                                           uri_comparison_level level) {
   auto result = path.to_string();
 
   if (uri_comparison_level::syntax_based == level) {
