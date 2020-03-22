@@ -11,7 +11,7 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/join.hpp>
 namespace network_boost = boost;
-#else   // NETWORK_URI_EXTERNAL_BOOST
+#else  // NETWORK_URI_EXTERNAL_BOOST
 #include "../boost/algorithm/string/split.hpp"
 #include "../boost/algorithm/string/join.hpp"
 #endif  // NETWORK_URI_EXTERNAL_BOOST
@@ -27,23 +27,20 @@ std::string normalize_path_segments(string_view path) {
 
   if (!path.empty()) {
     std::vector<std::string> path_segments;
-    network_boost::split(path_segments, path, [](char ch) {
-      return ch == '/';
-    });
+    network_boost::split(path_segments, path,
+                         [](char ch) { return ch == '/'; });
 
     bool last_segment_is_slash = path_segments.back().empty();
     std::vector<std::string> normalized_segments;
     for (const auto &segment : path_segments) {
       if (segment.empty() || (segment == ".")) {
         continue;
-      }
-      else if (segment == "..") {
+      } else if (segment == "..") {
         if (normalized_segments.empty()) {
           throw uri_builder_error();
         }
         normalized_segments.pop_back();
-      }
-      else {
+      } else {
         normalized_segments.push_back(segment);
       }
     }
@@ -72,10 +69,9 @@ std::string normalize_path(string_view path, uri_comparison_level level) {
     detail::for_each(result, percent_encoded_to_upper<std::string>());
 
     // % encoding normalization
-    result.erase(
-        detail::decode_encoded_unreserved_chars(std::begin(result),
-                                                std::end(result)),
-        std::end(result));
+    result.erase(detail::decode_encoded_unreserved_chars(std::begin(result),
+                                                         std::end(result)),
+                 std::end(result));
 
     // % path segment normalization
     result = normalize_path_segments(result);

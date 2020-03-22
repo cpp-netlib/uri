@@ -48,7 +48,7 @@ void uri_builder::set_scheme(string_type &&scheme) {
   // validate scheme is valid and normalize
   scheme_ = scheme;
   detail::transform(*scheme_, std::begin(*scheme_),
-                    [] (char ch) { return std::tolower(ch, std::locale()); });
+                    [](char ch) { return std::tolower(ch, std::locale()); });
 }
 
 void uri_builder::set_user_info(string_type &&user_info) {
@@ -114,24 +114,23 @@ uri_builder &uri_builder::clear_path() {
 void uri_builder::append_query_component(string_type &&name) {
   if (!query_) {
     query_ = string_type();
-  }
-  else {
+  } else {
     query_->append("&");
   }
-  network::uri::encode_query_component(
-      std::begin(name), std::end(name), std::back_inserter(*query_));
+  network::uri::encode_query_component(std::begin(name), std::end(name),
+                                       std::back_inserter(*query_));
 }
 
-void uri_builder::append_query_key_value_pair(string_type &&key, string_type &&value) {
+void uri_builder::append_query_key_value_pair(string_type &&key,
+                                              string_type &&value) {
   if (!query_) {
     query_ = string_type();
   } else {
     query_->push_back('&');
   }
-  network::uri::encode_query_key_value_pair(
-      std::begin(key), std::end(key),
-      std::begin(value), std::end(value),
-      std::back_inserter(*query_));
+  network::uri::encode_query_key_value_pair(std::begin(key), std::end(key),
+                                            std::begin(value), std::end(value),
+                                            std::back_inserter(*query_));
 }
 
 uri_builder &uri_builder::clear_query() {

@@ -18,7 +18,6 @@
 #include <functional>
 #include <memory>
 #include <string>
-#include <cstdlib>
 #include <network/string_view.hpp>
 #include <network/optional.hpp>
 #include <network/uri/config.hpp>
@@ -577,8 +576,8 @@ class uri {
    * \returns The iterator at the end + 1th in the output sequence.
    */
   template <typename InputIter, typename OutputIter>
-  static OutputIter encode_query_component(
-      InputIter first, InputIter last, OutputIter out) {
+  static OutputIter encode_query_component(InputIter first, InputIter last,
+                                           OutputIter out) {
     return detail::encode_query_component(first, last, out);
   }
 
@@ -594,10 +593,11 @@ class uri {
    * \returns The iterator at the end + 1th in the output sequence.
    */
   template <typename InputIter, typename OutputIter>
-  static OutputIter encode_query_key_value_pair(
-      InputIter key_first, InputIter key_last,
-      InputIter value_first, InputIter value_last,
-      OutputIter out) {
+  static OutputIter encode_query_key_value_pair(InputIter key_first,
+                                                InputIter key_last,
+                                                InputIter value_first,
+                                                InputIter value_last,
+                                                OutputIter out) {
     out = detail::encode_query_component(key_first, key_last, out);
     out++ = '=';
     return detail::encode_query_component(value_first, value_last, out);
@@ -676,8 +676,8 @@ inline uri make_uri(const Source &source, std::error_code &ec) {
 void swap(uri &lhs, uri &rhs) noexcept;
 
 /**
-* \brief Equality operator for the \c uri.
-*/
+ * \brief Equality operator for the \c uri.
+ */
 bool operator==(const uri &lhs, const uri &rhs) noexcept;
 
 /**

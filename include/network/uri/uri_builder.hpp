@@ -164,7 +164,7 @@ class uri_builder {
   }
 
   /**
-   * \brief Adds a new path to the uri_builder.
+   * \brief Sets a new path to the uri_builder.
    * \param path The path.
    * \returns \c *this
    */

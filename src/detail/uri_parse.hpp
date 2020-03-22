@@ -12,7 +12,8 @@ namespace network {
 namespace detail {
 struct uri_parts;
 
-bool parse(string_view::const_iterator &first, string_view::const_iterator last, uri_parts &parts);
+bool parse(string_view::const_iterator &first, string_view::const_iterator last,
+           uri_parts &parts);
 }  // namespace detail
 }  // namespace network
 
